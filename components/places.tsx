@@ -13,7 +13,11 @@ import {
 import "@reach/combobox/styles.css";
 
 type PlacesProps = {
-  setOffice: (position: google.maps.LatLngLiteral) => void;
+  setOffice: (
+    position: google.maps.LatLngLiteral,
+    name: string,
+    type: string
+  ) => void;
   createMarker: (type: string) => void;
 };
 
@@ -29,76 +33,71 @@ export default function Places({ setOffice, createMarker }: PlacesProps) {
   const [markerType, setMarkerType] = useState<string>("default");
   const [isOptionSelected, setIsOptionSelected] = useState(false);
   const [showMarkerInput, setShowMarkerInput] = useState(false);
+  const [typeValue, setTypeValue] = useState<string>("default");
+
+  const handleMarkerTypeSelect = (selected: string) => {
+    setMarkerType(selected);
+    setTypeValue(selected); // Store the selected type
+    createMarker(selected);
+    setIsOptionSelected(true);
+  };
 
   const handleSelect = async (val: string) => {
     setValue(val, false);
     clearSuggestions();
-    setIsOptionSelected(true); // Set to true when an option is selected
 
     const results = await getGeocode({ address: val });
     const { lat, lng } = await getLatLng(results[0]);
-    setOffice({ lat, lng });
+    const name = val;
+    const type = typeValue; // Access the stored type
+    setOffice({ lat, lng }, name, type);
 
-    // Show the marker type input bar
     setShowMarkerInput(true);
   };
 
-  const handleMarkerTypeSelect = (selected: string) => {
-    setMarkerType(selected);
-
-    // Use the createMarker function to add the marker to the map
-    createMarker(selected);
-  };
-
-  const isAddressEntered = value.trim() !== "";
-
   return (
     <div>
-      <Combobox onSelect={handleSelect}>
-        {/* Address input */}
+      <Combobox onSelect={handleMarkerTypeSelect}>
         <ComboboxInput
-          value={value}
+          value={typeValue}
           onChange={(e) => {
-            setValue(e.target.value);
-            setIsOptionSelected(false); // Reset to false when the user types
-            setShowMarkerInput(false); // Hide the marker input if the user types
+            setTypeValue(e.target.value);
+            setIsOptionSelected(false);
+            setShowMarkerInput(false);
           }}
           disabled={!ready}
           className="combobox-input input-field"
-          placeholder="What's the place's address?"
+          placeholder="What type of place is this?"
         />
         <ComboboxPopover>
           <ComboboxList>
-            {status === "OK" &&
-              data.map(({ place_id, description }) => (
-                <ComboboxOption key={place_id} value={description} />
-              ))}
+            <ComboboxOption value="home" />
+            <ComboboxOption value="work" />
+            <ComboboxOption value="restaurant" />
+            <ComboboxOption value="shop" />
+            <ComboboxOption value="park" />
+            {/* Add more options as needed */}
           </ComboboxList>
         </ComboboxPopover>
       </Combobox>
-
-      {/* Marker type input (conditionally rendered) */}
-      {showMarkerInput && (
-        <Combobox
-          aria-labelledby="marker-type-label"
-          onSelect={handleMarkerTypeSelect}
-        >
+      {isOptionSelected && (
+        <Combobox onSelect={handleSelect}>
           <ComboboxInput
-            value={markerType}
-            onChange={(e) => setMarkerType(e.target.value)}
+            value={value}
+            onChange={(e) => {
+              setValue(e.target.value);
+              setShowMarkerInput(false);
+            }}
             disabled={!ready}
             className="combobox-input input-field"
-            placeholder="What type of place is this?"
-            id="marker-type-label"
+            placeholder="What's the place's address?"
           />
           <ComboboxPopover>
             <ComboboxList>
-              <ComboboxOption value="home" />
-              <ComboboxOption value="work" />
-              <ComboboxOption value="restaurant" />
-              <ComboboxOption value="shop" />
-              <ComboboxOption value="park" />
-              {/* Add more marker types as needed */}
+              {status === "OK" &&
+                data.map(({ place_id, description }) => (
+                  <ComboboxOption key={place_id} value={description} />
+                ))}
             </ComboboxList>
           </ComboboxPopover>
         </Combobox>

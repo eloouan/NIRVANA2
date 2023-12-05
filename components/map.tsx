@@ -1,22 +1,38 @@
-import { useState, useMemo, useCallback, useRef } from "react";
+import {
+  useState,
+  useMemo,
+  useCallback,
+  useRef,
+  useEffect,
+  Fragment,
+} from "react";
 import {
   GoogleMap,
   Marker,
   DirectionsRenderer,
   Circle,
   MarkerClusterer,
+  InfoWindow,
+  MarkerProps,
 } from "@react-google-maps/api";
+import usePlacesAutocomplete, {
+  getGeocode,
+  getLatLng,
+} from "use-places-autocomplete";
 import Places from "./places";
 import Distance from "./distance";
 import MenuButton from "./menu-button";
 import Snowfall from "./snowfall";
 import SnowRoof from "./images/snow-roof-long.png";
+import cluster from "cluster";
+import FilterButton from "./filter-button"; // Update the path based on your file structure
 
 type LatLngLiteral = google.maps.LatLngLiteral;
 type DirectionsResult = google.maps.DirectionsResult;
 type MapOptions = google.maps.MapOptions;
+type MapProps = {};
 
-export default function Map() {
+const Map: React.FC<MapProps> = () => {
   const [officeMap1, setOfficeMap1] = useState<LatLngLiteral>();
   const [directionsMap1, setDirectionsMap1] = useState<DirectionsResult>();
   const [showMap1, setShowMap1] = useState(true);
@@ -25,6 +41,10 @@ export default function Map() {
   const [officeMap2, setOfficeMap2] = useState<LatLngLiteral>();
   const [directionsMap2, setDirectionsMap2] = useState<DirectionsResult>();
   const mapRefMap2 = useRef<GoogleMap>();
+
+  const addOffice = (position: LatLngLiteral, name: string, type: string) => {
+    setOffices((prevOffices) => [...prevOffices, { position, name, type }]);
+  };
 
   const center = useMemo<LatLngLiteral>(
     () => ({ lat: 45.566580681555415, lng: 5.920610881510474 }),
@@ -51,9 +71,6 @@ export default function Map() {
 
   const onLoadMap1 = useCallback((map) => (mapRefMap1.current = map), []);
   const onLoadMap2 = useCallback((map) => (mapRefMap2.current = map), []);
-
-  const houseMap1 = useMemo(() => generateHouses(center, true), [center]);
-  const houseMap2 = useMemo(() => generateHouses(center, false), [center]);
 
   const fetchDirectionsMap1 = (house: LatLngLiteral) => {
     if (!officeMap1) return;
@@ -109,32 +126,82 @@ export default function Map() {
   };
 
   const [menuVisible, setMenuVisible] = useState(false);
+  const [offices, setOffices] = useState<
+    Array<{ position: LatLngLiteral; name: string; type: string }>
+  >([]);
+  const [markers, setMarkers] = useState<MarkerProps[]>([]);
+  const [markersLoaded, setMarkersLoaded] = useState(false);
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
 
-  const [markers, setMarkers] = useState([]);
-
   const createMarker = (type: string = "default") => {
-    const markerType = type; // default marker type
-    const newMarker = {
-      position: center, // Set the marker's position based on your requirements
-      title: "New Marker",
-      type: markerType,
-    };
-    setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
+    if (offices.length > 0) {
+      const newMarkers = offices.map((office, index) => ({
+        position: office.position,
+        title: office.name,
+        type: type,
+        key: `office-${index}`, // Use a unique key for each marker
+      }));
+
+      setMarkers((prevMarkers) => [...prevMarkers, ...newMarkers]);
+    }
+  };
+
+  useEffect(() => {
+    setMarkersLoaded(true);
+  }, []);
+
+  const [selectedMarker, setSelectedMarker] = useState<null | {
+    address: string;
+    description: string;
+    type: string;
+    position: { lat: number; lng: number };
+  }>(null);
+
+  const [selectedOffice, setSelectedOffice] = useState<null | {
+    position: { lat: number; lng: number };
+    name: string;
+  }>(null);
+
+  const markerIcons = {
+    restaurant: "https://cdn-icons-png.flaticon.com/32/8732/8732445.png",
+    shopping:
+      "https://cdn2.iconfinder.com/data/icons/christmas-filled-outline-1/512/christmas_holiday_merry_xmas_tree_5-32.png",
+    entertainement: "https://cdn-icons-png.flaticon.com/32/2503/2503508.png",
+    school: "https://cdn-icons-png.flaticon.com/32/2767/2767828.png",
+    park: "https://cdn-icons-png.flaticon.com/32/2203/2203973.png",
+    gym: "https://cdn-icons-png.flaticon.com/32/5764/5764179.png",
+    transport:
+      "https://cdn3.iconfinder.com/data/icons/christmas-filled-7/128/christmas_48-32.png",
+  };
+
+  const handleMarkerFilter = (type: string) => {
+    // Combine offices and defaultPoi arrays
+    const allMarkers = [...offices, ...defaultPoi];
+
+    // Implement the logic to filter markers based on the selected type
+    const filteredMarkers = allMarkers.filter((marker) => {
+      console.log(marker.type, type);
+      return marker.type === type;
+    });
+
+    console.log(filteredMarkers);
+
+    setMarkers(filteredMarkers);
   };
 
   return (
     <div className="container">
       <div className="controls">
         <Places
-          setOffice={(position) => {
+          setOffice={(position, name, type) => {
             showMap1 ? setOfficeMap1(position) : setOfficeMap2(position);
             showMap1
               ? mapRefMap1.current?.panTo(position)
               : mapRefMap2.current?.panTo(position);
+            addOffice(position, name, type);
           }}
           createMarker={createMarker}
         />
@@ -155,13 +222,46 @@ export default function Map() {
             })}
             onLoad={onLoadMap1}
           >
+            <MarkerClusterer>
+              {(clusterer) =>
+                defaultPoi.map((poi, index) => (
+                  <Fragment key={index}>
+                    <Marker
+                      position={poi.position}
+                      title={poi.description}
+                      clusterer={clusterer}
+                      icon={{ url: markerIcons[poi.type] }}
+                      onClick={() => {
+                        fetchDirectionsMap1(poi.position);
+                        setSelectedMarker(poi);
+                      }}
+                    />
+                    {/* Add other marker customization here */}
+                    {selectedMarker === poi && (
+                      <InfoWindow
+                        position={poi.position}
+                        onCloseClick={() => setSelectedMarker(null)}
+                      >
+                        <div>
+                          <h3>{poi.description}</h3>
+                          <p>{poi.address}</p>
+                          {/* Add any additional information you want to display */}
+                        </div>
+                      </InfoWindow>
+                    )}
+                  </Fragment>
+                ))
+              }
+            </MarkerClusterer>
+
             {directionsMap1 && (
               <DirectionsRenderer
                 directions={directionsMap1}
                 options={{
+                  suppressMarkers: true,
                   polylineOptions: {
                     zIndex: 50,
-                    strokeColor: "#396d7c",
+                    strokeColor: "#FF7676",
                     strokeWeight: 5,
                   },
                 }}
@@ -173,39 +273,34 @@ export default function Map() {
                   position={officeMap1}
                   icon="https://cdn1.iconfinder.com/data/icons/christmas-98/595/Christmas_08-32.png"
                 />
-
-                <MarkerClusterer>
-                  {(cluster) =>
-                    houseMap1.map((house) => (
-                      <Marker
-                        key={house.lat}
-                        position={house}
-                        clusterer={cluster}
-                        onClick={() => {
-                          fetchDirectionsMap1(house);
-                        }}
-                      />
-                    ))
-                  }
-                </MarkerClusterer>
-
-                <Circle
-                  center={officeMap1}
-                  radius={1500}
-                  options={closeOptions}
-                />
-                <Circle
-                  center={officeMap1}
-                  radius={3000}
-                  options={middleOptions}
-                />
-                <Circle
-                  center={officeMap1}
-                  radius={4500}
-                  options={farOptions}
-                />
               </>
             )}
+            {offices.map((office, index) => (
+              <Fragment key={`office-marker-${index}`}>
+                <Marker
+                  position={office.position}
+                  title={office.name}
+                  icon="https://cdn1.iconfinder.com/data/icons/joyful-christmas/56/christmas_house-32.png"
+                  onClick={() => {
+                    setSelectedOffice(office);
+                    fetchDirectionsMap1(office.position);
+                  }}
+                />
+                {selectedOffice &&
+                  selectedOffice.position === office.position && (
+                    <InfoWindow
+                      position={office.position}
+                      onCloseClick={() => setSelectedOffice(null)}
+                    >
+                      <div>
+                        <h3>{office.name}</h3>
+                        <p>{office.type}</p>
+                        {/* Add any additional information you want to display */}
+                      </div>
+                    </InfoWindow>
+                  )}
+              </Fragment>
+            ))}
           </GoogleMap>
         ) : (
           <GoogleMap
@@ -239,39 +334,34 @@ export default function Map() {
                   position={officeMap2}
                   icon="https://cdn1.iconfinder.com/data/icons/christmas-98/595/Christmas_08-32.png"
                 />
-
-                <MarkerClusterer>
-                  {(cluster) =>
-                    houseMap2.map((house) => (
-                      <Marker
-                        key={house.lat}
-                        position={house}
-                        clusterer={cluster}
-                        onClick={() => {
-                          fetchDirectionsMap2(house);
-                        }}
-                      />
-                    ))
-                  }
-                </MarkerClusterer>
-
-                <Circle
-                  center={officeMap2}
-                  radius={1500}
-                  options={closeOptions}
-                />
-                <Circle
-                  center={officeMap2}
-                  radius={3000}
-                  options={middleOptions}
-                />
-                <Circle
-                  center={officeMap2}
-                  radius={4500}
-                  options={farOptions}
-                />
               </>
             )}
+            {offices.map((office, index) => (
+              <Fragment key={`office-marker-${index}`}>
+                <Marker
+                  position={office.position}
+                  title={office.name}
+                  icon="https://cdn1.iconfinder.com/data/icons/joyful-christmas/56/christmas_house-32.png"
+                  onClick={() => {
+                    setSelectedOffice(office);
+                    fetchDirectionsMap2(office.position);
+                  }}
+                />
+                {selectedOffice &&
+                  selectedOffice.position === office.position && (
+                    <InfoWindow
+                      position={office.position}
+                      onCloseClick={() => setSelectedOffice(null)}
+                    >
+                      <div>
+                        <h3>{office.name}</h3>
+
+                        {/* Add any additional information you want to display */}
+                      </div>
+                    </InfoWindow>
+                  )}
+              </Fragment>
+            ))}
           </GoogleMap>
         )}
 
@@ -302,10 +392,22 @@ export default function Map() {
         </div>
         <button className="recenter-button" onClick={recenterMap}></button>
         <Snowfall></Snowfall>
+        <FilterButton
+          markerTypes={[
+            "restaurant",
+            "shopping",
+            "entertainment",
+            "school",
+            "park",
+            "gym",
+            "transport",
+          ]}
+          onFilter={(type) => handleMarkerFilter(type)}
+        />
       </div>
     </div>
   );
-}
+};
 
 const defaultOptions = {
   strokeOpacity: 0.5,
@@ -315,39 +417,72 @@ const defaultOptions = {
   editable: false,
   visible: true,
 };
-const closeOptions = {
-  ...defaultOptions,
-  zIndex: 3,
-  fillOpacity: 0.05,
-  strokeColor: "#8BC34A",
-  fillColor: "#8BC34A",
-};
-const middleOptions = {
-  ...defaultOptions,
-  zIndex: 2,
-  fillOpacity: 0.05,
-  strokeColor: "#FBC02D",
-  fillColor: "#FBC02D",
-};
-const farOptions = {
-  ...defaultOptions,
-  zIndex: 1,
-  fillOpacity: 0.05,
-  strokeColor: "#FF5252",
-  fillColor: "#FF5252",
-};
 
-const generateHouses = (position: LatLngLiteral, isMap1: boolean) => {
-  const _houses: Array<LatLngLiteral> = [];
-  const directionMultiplier = isMap1 ? -1 : 1;
+// Base de donnees exemple Chambery
+const defaultPoi = [
+  {
+    address: "32 Pl. Monge, 73000 Chambéry",
+    description: "Restaurant Carré des Sens - fine dining",
+    type: "restaurant",
+    position: {
+      lat: 45.56324311633563,
+      lng: 5.921157303181863,
+    },
+  },
+  {
+    address: "1097 Av. des Landiers, 73000 Chambéry",
+    description: "Shopping mall Chamnord",
+    type: "shopping",
+    position: {
+      lat: 45.59258489131312,
+      lng: 5.899454352402417,
+    },
+  },
+  {
+    address: "4 Rue Derrière les Murs, 73000 Chambéry",
+    description: "Pathe Movie Theatre",
+    type: "entertainement",
+    position: {
+      lat: 45.56769951499307,
+      lng: 5.918508726372975,
+    },
+  },
+  {
+    address: "Rue du Lac Majeur, 73370 Le Bourget-du-Lac",
+    description: "Universite Bourget du Lac",
+    type: "school",
+    position: {
+      lat: 45.641565952237485,
+      lng: 5.87271983174593,
+    },
+  },
+  {
+    address: "All. Ouahigouya, 73000 Chambéry",
+    description: "Park du Verney",
+    type: "park",
+    position: {
+      lat: 45.56954050075045,
+      lng: 5.9174064810826525,
+    },
+  },
+  {
+    address: "8 Rue Bonivard, 73000 Chambéry",
+    description: "KeepCool gym",
+    type: "gym",
+    position: {
+      lat: 45.566886527715134,
+      lng: 5.918076037055356,
+    },
+  },
+  {
+    address: "Pl. de la Gare, 73010 Chambéry",
+    description: "Train Station Chambery, Challes-les-eaux",
+    type: "transport",
+    position: {
+      lat: 45.57124197967436,
+      lng: 5.919697965999837,
+    },
+  },
+];
 
-  for (let i = 0; i < 30; i++) {
-    const direction = Math.random() < 0.5 ? -38 : 38;
-    _houses.push({
-      lat: position.lat + (Math.random() / direction) * directionMultiplier,
-      lng: position.lng + (Math.random() / direction) * directionMultiplier,
-    });
-  }
-
-  return _houses;
-};
+export default Map;
