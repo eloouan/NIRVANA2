@@ -26,6 +26,7 @@ import Snowfall from "./snowfall";
 import SnowRoof from "./images/snow-roof-long.png";
 import cluster from "cluster";
 import FilterButton from "./filter-button"; // Update the path based on your file structure
+import { off } from "process";
 
 type LatLngLiteral = google.maps.LatLngLiteral;
 type DirectionsResult = google.maps.DirectionsResult;
@@ -177,19 +178,60 @@ const Map: React.FC<MapProps> = () => {
       "https://cdn3.iconfinder.com/data/icons/christmas-filled-7/128/christmas_48-32.png",
   };
 
+  const hiddenMarkers: Array<{
+    address?: string;
+    description?: string;
+    type?: string;
+    position: LatLngLiteral;
+    name?: string;
+  }> = [];
+
+  const visibleMarkers: Array<{
+    address?: string;
+    description?: string;
+    type?: string;
+    position: LatLngLiteral;
+    name?: string;
+  }> = [...offices, ...defaultPoi];
+
   const handleMarkerFilter = (type: string) => {
     // Combine offices and defaultPoi arrays
     const allMarkers = [...offices, ...defaultPoi];
-
-    // Implement the logic to filter markers based on the selected type
-    const filteredMarkers = allMarkers.filter((marker) => {
-      console.log(marker.type, type);
-      return marker.type === type;
-    });
-
-    console.log(filteredMarkers);
-
-    setMarkers(filteredMarkers);
+    for (let i = 0; i < allMarkers.length; i++) {
+      const marker = allMarkers[i];
+      console.log(marker.type, type, marker.type !== type);
+      //console.log(marker.type, type);
+      if (
+        marker.type !== type &&
+        visibleMarkers.some((visibleMarker) => visibleMarker === marker) // if marker in visibleMarkers
+      ) {
+        const indexInVisibleMarkers = visibleMarkers.findIndex(
+          // find index of visible marker
+          (visibleMarker) => visibleMarker === marker
+        );
+        visibleMarkers.splice(indexInVisibleMarkers, 1);
+        marker.position = {
+          lat: marker.position.lat + 10,
+          lng: marker.position.lng,
+        };
+        hiddenMarkers.push(marker);
+      } else {
+        const indexInHiddenMarkers = hiddenMarkers.findIndex(
+          // find index of marker in hidden marker
+          (hiddenMarker) => hiddenMarker === marker
+        );
+        if (hiddenMarkers.some((hiddenMarker) => hiddenMarker === marker)) {
+          // if marker in hiddenMarkers
+          marker.position = {
+            lat: marker.position.lat,
+            lng: marker.position.lng,
+          };
+          visibleMarkers.push(marker);
+          hiddenMarkers.splice(indexInHiddenMarkers, 1);
+        }
+      }
+      console.log(visibleMarkers, hiddenMarkers);
+    }
   };
 
   return (
@@ -398,6 +440,7 @@ const Map: React.FC<MapProps> = () => {
             "shopping",
             "entertainment",
             "school",
+            "work",
             "park",
             "gym",
             "transport",
@@ -441,7 +484,7 @@ const defaultPoi = [
   {
     address: "4 Rue Derrière les Murs, 73000 Chambéry",
     description: "Pathe Movie Theatre",
-    type: "entertainement",
+    type: "entertainment",
     position: {
       lat: 45.56769951499307,
       lng: 5.918508726372975,
