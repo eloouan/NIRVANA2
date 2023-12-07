@@ -9,29 +9,31 @@ const FilterButton: React.FC<FilterButtonProps> = ({
   markerTypes,
   onClick,
 }) => {
-  const [showMenu, setShowMenu] = useState(false);
-
-  const toggleMenu = () => {
-    setShowMenu(!showMenu);
-  };
+  const [selectedType, setSelectedType] = useState<string | null>(null);
 
   const handleFilter = (type: string) => {
+    if (selectedType === type) {
+      setSelectedType(null);
+    } else {
+      setSelectedType(type);
+    }
     onClick(type);
-    toggleMenu();
   };
 
   return (
-    <div className="filter-button">
-      <button onClick={toggleMenu}>Filter Markers</button>
-      {showMenu && (
-        <div className="filter-menu">
-          {markerTypes.map((type, index) => (
-            <button key={index} onClick={() => handleFilter(type)}>
-              {type}
-            </button>
-          ))}
+    <div className="filter-menu">
+      {markerTypes.map((type, index) => (
+        <div key={index} className="filter-item">
+          <label className="filter-label">
+            <input
+              type="checkbox"
+              checked={selectedType === type}
+              onChange={() => handleFilter(type)}
+            />
+            {type}
+          </label>
         </div>
-      )}
+      ))}
     </div>
   );
 };

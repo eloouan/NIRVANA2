@@ -73,11 +73,13 @@ export default function Places({ setOffice, createMarker }: PlacesProps) {
         />
         <ComboboxPopover>
           <ComboboxList>
-            <ComboboxOption value="home" />
-            <ComboboxOption value="work" />
             <ComboboxOption value="restaurant" />
-            <ComboboxOption value="shop" />
+            <ComboboxOption value="shopping" />
+            <ComboboxOption value="entertainment" />
+            <ComboboxOption value="school" />
             <ComboboxOption value="park" />
+            <ComboboxOption value="gym" />
+            <ComboboxOption value="transport" />
             {/* Add more options as needed */}
           </ComboboxList>
         </ComboboxPopover>

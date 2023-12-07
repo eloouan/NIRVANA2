@@ -186,9 +186,9 @@ const Map: React.FC<MapProps> = () => {
     restaurant: "https://cdn-icons-png.flaticon.com/32/8732/8732445.png",
     shopping:
       "https://cdn2.iconfinder.com/data/icons/christmas-filled-outline-1/512/christmas_holiday_merry_xmas_tree_5-32.png",
-    entertainement: "https://cdn-icons-png.flaticon.com/32/2503/2503508.png",
+    entertainment: "https://cdn-icons-png.flaticon.com/32/2503/2503508.png",
     school: "https://cdn-icons-png.flaticon.com/32/2767/2767828.png",
-    park: "https://cdn-icons-png.flaticon.com/32/2203/2203973.png",
+    park: "https://cdn-icons-png.flaticon.com/32/489/489969.png",
     gym: "https://cdn-icons-png.flaticon.com/32/5764/5764179.png",
     transport:
       "https://cdn3.iconfinder.com/data/icons/christmas-filled-7/128/christmas_48-32.png",
@@ -425,7 +425,6 @@ const Map: React.FC<MapProps> = () => {
             "shopping",
             "entertainment",
             "school",
-            "work",
             "park",
             "gym",
             "transport",

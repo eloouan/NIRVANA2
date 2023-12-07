@@ -263,171 +263,67 @@ a {
   transform: scale(1.2);
 }
 
-.filter-button {
+.filter-menu {
   position: absolute;
-  right: 400px;
-  top: 50px;
+  top: 35px;
+  left: 700px;
+  display: flex; /* Use flex to arrange checkboxes in a row */
+  flex-wrap: wrap; /* Allow items to wrap onto the next line */
 }
 
-/*
-  
-  body {
-    background: #fff;
-    background-color: #eff8e2;
-    height: 100vh;
-    font: "Lexend Deca", sans-serif;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .wrapper {
-    width: var(--width);
-    height: var(--height);
-    position: relative;
-    border-radius: var(--border-radius);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 6rem;
-  }
-  
-  .fab {
-    background: var(--background);
-    width: var(--width);
-    height: var(--height);
-    position: relative;
-    z-index: 3;
-    border-radius: var(--border-radius);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    animation: fab-animation-reverse 0.4s ease-out forwards;
-  }
-  
-  .fab::before,
-  .fab::after {
-    content: "";
-    display: block;
-    position: absolute;
-    border-radius: 4px;
-    background: #fff;
-  }
-  
-  .fab::before {
-    width: 4px;
-    height: 18px;
-  }
-  
-  .fab::after {
-    width: 18px;
-    height: 4px;
-  }
-  
-  .fac {
-    width: 32px;
-    height: 150px;
-    border-radius: 64px;
-    position: absolute;
-    background: #fff;
-    z-index: 2;
-    padding: 0.5rem 0.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-    opacity: 0;
-    top: -110px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    transition: opacity 0.2s ease-in, top 0.2s ease-in, width 0.1s ease-in;
-  }
-  
-  .fac a {
-    color: var(--icon-color);
-    opacity: 0.8;
-  }
-  
-  .fac a:hover {
-    transition: 0.2s;
-    opacity: 1;
-    color: darken(#344955, 2%);
-  }
-  
-  input {
-    height: 100%;
-    width: 100%;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    position: absolute;
-    z-index: 5;
-    opacity: 0;
-  }
-  
-  input:checked ~ .fab {
-    animation: fab-animation 0.4s ease-out forwards;
-  }
-  
-  input:checked ~ .fac {
-    width: 32px;
-    height: 150px;
-    animation: fac-animation 0.4s ease-out forwards 0.1s;
-    top: -180px;
-    opacity: 1;
-  }
-  
-  @keyframes fab-animation {
-    0% {
-      transform: rotate(0) scale(1);
-    }
-    20% {
-      transform: rotate(60deg) scale(0.93);
-    }
-    55% {
-      transform: rotate(35deg) scale(0.97);
-    }
-    80% {
-      transform: rotate(48deg) scale(0.94);
-    }
-    100% {
-      transform: rotate(45deg) scale(0.95);
-    }
-  }
-  
-  @keyframes fab-animation-reverse {
-    0% {
-      transform: rotate(45deg) scale(0.95);
-    }
-    20% {
-      transform: rotate(-15deg);
-    }
-    55% {
-      transform: rotate(10deg);
-    }
-    80% {
-      transform: rotate(-3deg);
-    }
-    100% {
-      transform: rotate(0) scale(1);
-    }
-  }
-  
-  @keyframes fac-animation {
-    0% {
-      transform: scale(1, 1);
-    }
-    33% {
-      transform: scale(0.95, 1.05);
-    }
-    66% {
-      transform: scale(1.05, 0.95);
-    }
-    100% {
-      transform: scale(1, 1);
-    }
-  }
-  */
+.filter-item {
+  margin-right: 8px; /* Adjust as needed for horizontal separation */
+  margin-bottom: 8px; /* Adjust as needed for vertical separation */
+}
+
+.filter-label {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.8); /* Adjust as needed for transparency */
+  border-radius: 10px;
+  backdrop-filter: blur(8px); /* Adjust the blur amount as needed */
+}
+
+.filter-label:hover {
+  background-color: rgba(240, 240, 240, 0.8); /* Adjust as needed for transparency */
+}
+
+.filter-toggle {
+  position: relative;
+  width: 40px;
+  height: 20px;
+  background-color: #ccc; /* Adjust as needed */
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  flex-shrink: 0; /* Prevent flex items from shrinking */
+}
+
+.filter-toggle::before {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background-color: #fff; /* Adjust as needed */
+  border-radius: 50%;
+  top: 1px;
+  left: 1px;
+  transition: transform 0.3s ease;
+}
+
+.filter-toggle.on::before {
+  transform: translateX(20px);
+}
+
+input[type="checkbox"] {
+  display: none; /* Hide the actual checkbox */
+}
+
+/* Style for the checked state */
+input[type="checkbox"]:checked ~ .filter-label {
+  background-color: #333 !important; /* Adjust as needed for the dark background */
+  color: #fff !important; /* Adjust as needed for text color */
+}
