@@ -43,8 +43,16 @@ const Map: React.FC<MapProps> = () => {
   const [directionsMap2, setDirectionsMap2] = useState<DirectionsResult>();
   const mapRefMap2 = useRef<GoogleMap>();
 
-  const addOffice = (position: LatLngLiteral, name: string, type: string) => {
-    setOffices((prevOffices) => [...prevOffices, { position, name, type }]);
+  const addOffice = (
+    address: string,
+    description: string,
+    type: string,
+    position: LatLngLiteral
+  ) => {
+    setOffices((prevOffices) => [
+      ...prevOffices,
+      { address, description, type, position },
+    ]);
   };
 
   const center = useMemo<LatLngLiteral>(
@@ -128,7 +136,12 @@ const Map: React.FC<MapProps> = () => {
 
   const [menuVisible, setMenuVisible] = useState(false);
   const [offices, setOffices] = useState<
-    Array<{ position: LatLngLiteral; name: string; type: string }>
+    Array<{
+      address: string;
+      description: string;
+      type: string;
+      position: LatLngLiteral;
+    }>
   >([]);
   const [markers, setMarkers] = useState<MarkerProps[]>([]);
   const [markersLoaded, setMarkersLoaded] = useState(false);
@@ -141,7 +154,8 @@ const Map: React.FC<MapProps> = () => {
     if (offices.length > 0) {
       const newMarkers = offices.map((office, index) => ({
         position: office.position,
-        title: office.name,
+        title: office.address,
+        description: office.description,
         type: type,
         key: `office-${index}`, // Use a unique key for each marker
       }));
@@ -162,8 +176,10 @@ const Map: React.FC<MapProps> = () => {
   }>(null);
 
   const [selectedOffice, setSelectedOffice] = useState<null | {
+    address: string;
+    description: string;
+    type: string;
     position: { lat: number; lng: number };
-    name: string;
   }>(null);
 
   const markerIcons = {
@@ -199,8 +215,13 @@ const Map: React.FC<MapProps> = () => {
     const allMarkers = [...offices, ...defaultPoi];
     for (let i = 0; i < allMarkers.length; i++) {
       const marker = allMarkers[i];
-      console.log(marker.type, type, marker.type !== type);
-      //console.log(marker.type, type);
+      console.log(marker.type, type);
+      console.log(
+        "visible?",
+        visibleMarkers.some((visibleMarker) => visibleMarker === marker),
+        "hidden?",
+        hiddenMarkers.some((hiddenMarker) => hiddenMarker === marker)
+      );
       if (
         marker.type !== type &&
         visibleMarkers.some((visibleMarker) => visibleMarker === marker) // if marker in visibleMarkers
@@ -215,22 +236,26 @@ const Map: React.FC<MapProps> = () => {
           lng: marker.position.lng,
         };
         hiddenMarkers.push(marker);
-      } else {
-        const indexInHiddenMarkers = hiddenMarkers.findIndex(
+      }
+      if (marker.type === type) {
+        const indexInHiddenMarkers = hiddenMarkers.indexOf(
           // find index of marker in hidden marker
-          (hiddenMarker) => hiddenMarker === marker
+          allMarkers[i]
         );
+        console.log(indexInHiddenMarkers);
         if (hiddenMarkers.some((hiddenMarker) => hiddenMarker === marker)) {
           // if marker in hiddenMarkers
           marker.position = {
-            lat: marker.position.lat,
+            lat: marker.position.lat - 20,
             lng: marker.position.lng,
           };
           visibleMarkers.push(marker);
           hiddenMarkers.splice(indexInHiddenMarkers, 1);
         }
       }
+      console.log(marker.position.lat);
       console.log(visibleMarkers, hiddenMarkers);
+      setSelectedMarker(marker);
     }
   };
 
@@ -238,12 +263,12 @@ const Map: React.FC<MapProps> = () => {
     <div className="container">
       <div className="controls">
         <Places
-          setOffice={(position, name, type) => {
+          setOffice={(address, description, type, position) => {
             showMap1 ? setOfficeMap1(position) : setOfficeMap2(position);
             showMap1
               ? mapRefMap1.current?.panTo(position)
               : mapRefMap2.current?.panTo(position);
-            addOffice(position, name, type);
+            addOffice(address, description, type, position);
           }}
           createMarker={createMarker}
         />
@@ -321,7 +346,7 @@ const Map: React.FC<MapProps> = () => {
               <Fragment key={`office-marker-${index}`}>
                 <Marker
                   position={office.position}
-                  title={office.name}
+                  title={office.address}
                   icon="https://cdn1.iconfinder.com/data/icons/joyful-christmas/56/christmas_house-32.png"
                   onClick={() => {
                     setSelectedOffice(office);
@@ -335,7 +360,7 @@ const Map: React.FC<MapProps> = () => {
                       onCloseClick={() => setSelectedOffice(null)}
                     >
                       <div>
-                        <h3>{office.name}</h3>
+                        <h3>{office.address}</h3>
                         <p>{office.type}</p>
                         {/* Add any additional information you want to display */}
                       </div>
@@ -382,7 +407,7 @@ const Map: React.FC<MapProps> = () => {
               <Fragment key={`office-marker-${index}`}>
                 <Marker
                   position={office.position}
-                  title={office.name}
+                  title={office.address}
                   icon="https://cdn1.iconfinder.com/data/icons/joyful-christmas/56/christmas_house-32.png"
                   onClick={() => {
                     setSelectedOffice(office);
@@ -396,7 +421,7 @@ const Map: React.FC<MapProps> = () => {
                       onCloseClick={() => setSelectedOffice(null)}
                     >
                       <div>
-                        <h3>{office.name}</h3>
+                        <h3>{office.address}</h3>
 
                         {/* Add any additional information you want to display */}
                       </div>
@@ -445,7 +470,7 @@ const Map: React.FC<MapProps> = () => {
             "gym",
             "transport",
           ]}
-          onFilter={(type) => handleMarkerFilter(type)}
+          onClick={(type) => handleMarkerFilter(type)}
         />
       </div>
     </div>
@@ -460,6 +485,18 @@ const defaultOptions = {
   editable: false,
   visible: true,
 };
+
+{
+  /*
+fetch("recup.php")
+.then( response => response.json())
+.then( data => {
+  const defaultPoi = data;
+    console.log(data);
+    // transformData(data);
+})
+*/
+}
 
 // Base de donnees exemple Chambery
 const defaultPoi = [

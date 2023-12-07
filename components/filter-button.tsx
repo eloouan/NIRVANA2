@@ -2,12 +2,12 @@ import React, { useState } from "react";
 
 interface FilterButtonProps {
   markerTypes: string[];
-  onFilter: (type: string) => void;
+  onClick: (type: string) => void;
 }
 
 const FilterButton: React.FC<FilterButtonProps> = ({
   markerTypes,
-  onFilter,
+  onClick,
 }) => {
   const [showMenu, setShowMenu] = useState(false);
 
@@ -16,7 +16,7 @@ const FilterButton: React.FC<FilterButtonProps> = ({
   };
 
   const handleFilter = (type: string) => {
-    onFilter(type);
+    onClick(type);
     toggleMenu();
   };
 

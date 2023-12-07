@@ -14,9 +14,10 @@ import "@reach/combobox/styles.css";
 
 type PlacesProps = {
   setOffice: (
-    position: google.maps.LatLngLiteral,
-    name: string,
-    type: string
+    address: string,
+    description: string,
+    type: string,
+    position: google.maps.LatLngLiteral
   ) => void;
   createMarker: (type: string) => void;
 };
@@ -48,9 +49,10 @@ export default function Places({ setOffice, createMarker }: PlacesProps) {
 
     const results = await getGeocode({ address: val });
     const { lat, lng } = await getLatLng(results[0]);
-    const name = val;
+    const address = val;
     const type = typeValue; // Access the stored type
-    setOffice({ lat, lng }, name, type);
+    const description = val;
+    setOffice(address, description, type, { lat, lng });
 
     setShowMarkerInput(true);
   };
