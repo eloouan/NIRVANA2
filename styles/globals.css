@@ -279,8 +279,8 @@ a {
   top: 50px;
 }
 
-/* CSS de la preload */
-.banner {
+/* CSS de la preload*/
+/* .banner {
   position: relative;
   width: 100%;
   height: 100vh;
@@ -308,7 +308,7 @@ a {
   position: absolute;
   display: block;
   right: -110%;
-  bottom: -90%; /* Ajustez cette valeur en fonction de la moitié basse de l'écran que vous souhaitez occuper */
+  bottom: -90%; 
   min-width: 200%;
   scale: 0.6;
   animation: animate 3.2s linear 1 forwards;
@@ -319,7 +319,7 @@ a {
   position: absolute;
   display: block;
   right: -50%;
-  bottom: -90%; /* Ajustez cette valeur en fonction de la moitié basse de l'écran que vous souhaitez occuper */
+  bottom: -90%; 
   min-width: 200%;
   scale: 0.6;
   animation: animate1 3.2s linear 1 forwards;
@@ -329,7 +329,7 @@ a {
   position: absolute;
   display: block;
   right: -50%;
-  bottom: -90%; /* Ajustez cette valeur en fonction de la moitié basse de l'écran que vous souhaitez occuper */
+  bottom: -90%; 
   min-width: 200%;
   scale: 0.6;
   animation: animate2 3.2s linear 1 forwards;
@@ -339,7 +339,7 @@ a {
   position: absolute;
   display: block;
   right: -50%;
-  bottom: -90%; /* Ajustez cette valeur en fonction de la moitié basse de l'écran que vous souhaitez occuper */
+  bottom: -90%; 
   min-width: 200%;
   scale: 0.6;
   animation: animate3 3.2s linear 1 forwards;
@@ -349,7 +349,7 @@ a {
   position: absolute;
   display: block;
   right: -50%;
-  bottom: -90%; /* Ajustez cette valeur en fonction de la moitié basse de l'écran que vous souhaitez occuper */
+  bottom: -90%; 
   min-width: 200%;
   scale: 0.6;
   animation: animate4 3.2s linear 1 forwards;
@@ -359,7 +359,7 @@ a {
   position: absolute;
   display: block;
   right: -50%;
-  bottom: -90%; /* Ajustez cette valeur en fonction de la moitié basse de l'écran que vous souhaitez occuper */
+  bottom: -90%; 
   min-width: 200%;
   scale: 0.6;
   animation: animate5 3.2s linear 1 forwards;
@@ -369,7 +369,7 @@ a {
   position: absolute;
   display: block;
   right: -50%;
-  bottom: -90%; /* Ajustez cette valeur en fonction de la moitié basse de l'écran que vous souhaitez occuper */
+  bottom: -90%; 
   min-width: 200%;
   scale: 0.6;
   animation: animate6 3.2s linear 1 forwards;
@@ -383,7 +383,7 @@ a {
   }
   99% {
     opacity: 1;
-    transform: translateX(8000px); /* Ajustez la distance que vous souhaitez */
+    transform: translateX(8000px);
   }
   100%{
       opacity: 0;
@@ -396,7 +396,7 @@ a {
   }
   99% {
     opacity: 1;
-    transform: translateX(-4000px); /* Ajustez la distance que vous souhaitez */
+    transform: translateX(-4000px); 
   }
   100%{
       opacity: 0;
@@ -409,7 +409,7 @@ a {
   }
   99% {
     opacity: 1;
-    transform: translateX(3500px); /* Ajustez la distance que vous souhaitez */
+    transform: translateX(3500px); 
   }
 
   100%{
@@ -423,7 +423,7 @@ a {
   }
   100% {
     opacity: 1;
-    transform: translateX(-4000px); /* Ajustez la distance que vous souhaitez */
+    transform: translateX(-4000px); 
   }
 }
 @keyframes animate4 {
@@ -434,7 +434,7 @@ a {
   }
   99% {
     opacity: 1;
-    transform: translateX(-4000px); /* Ajustez la distance que vous souhaitez */
+    transform: translateX(-4000px); 
   }
   100%{
       opacity: 0;
@@ -448,7 +448,7 @@ a {
   }
   99% {
     opacity: 1;
-    transform: translateX(4000px); /* Ajustez la distance que vous souhaitez */
+    transform: translateX(4000px); 
   }
   100%{
       opacity: 0;
@@ -462,7 +462,7 @@ a {
   }
   99% {
     opacity: 1;
-    transform: translateX(-4000px); /* Ajustez la distance que vous souhaitez */
+    transform: translateX(-4000px); 
   }
   100%{
       opacity: 0;
@@ -502,169 +502,4 @@ a {
           width: 240px;
       }
   }
-}
-
-/* Fin de la css de la preload */
-
-/*
-  
-  body {
-    background: #fff;
-    background-color: #eff8e2;
-    height: 100vh;
-    font: "Lexend Deca", sans-serif;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .wrapper {
-    width: var(--width);
-    height: var(--height);
-    position: relative;
-    border-radius: var(--border-radius);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 6rem;
-  }
-  
-  .fab {
-    background: var(--background);
-    width: var(--width);
-    height: var(--height);
-    position: relative;
-    z-index: 3;
-    border-radius: var(--border-radius);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    animation: fab-animation-reverse 0.4s ease-out forwards;
-  }
-  
-  .fab::before,
-  .fab::after {
-    content: "";
-    display: block;
-    position: absolute;
-    border-radius: 4px;
-    background: #fff;
-  }
-  
-  .fab::before {
-    width: 4px;
-    height: 18px;
-  }
-  
-  .fab::after {
-    width: 18px;
-    height: 4px;
-  }
-  
-  .fac {
-    width: 32px;
-    height: 150px;
-    border-radius: 64px;
-    position: absolute;
-    background: #fff;
-    z-index: 2;
-    padding: 0.5rem 0.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-    opacity: 0;
-    top: -110px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    transition: opacity 0.2s ease-in, top 0.2s ease-in, width 0.1s ease-in;
-  }
-  
-  .fac a {
-    color: var(--icon-color);
-    opacity: 0.8;
-  }
-  
-  .fac a:hover {
-    transition: 0.2s;
-    opacity: 1;
-    color: darken(#344955, 2%);
-  }
-  
-  input {
-    height: 100%;
-    width: 100%;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    position: absolute;
-    z-index: 5;
-    opacity: 0;
-  }
-  
-  input:checked ~ .fab {
-    animation: fab-animation 0.4s ease-out forwards;
-  }
-  
-  input:checked ~ .fac {
-    width: 32px;
-    height: 150px;
-    animation: fac-animation 0.4s ease-out forwards 0.1s;
-    top: -180px;
-    opacity: 1;
-  }
-  
-  @keyframes fab-animation {
-    0% {
-      transform: rotate(0) scale(1);
-    }
-    20% {
-      transform: rotate(60deg) scale(0.93);
-    }
-    55% {
-      transform: rotate(35deg) scale(0.97);
-    }
-    80% {
-      transform: rotate(48deg) scale(0.94);
-    }
-    100% {
-      transform: rotate(45deg) scale(0.95);
-    }
-  }
-  
-  @keyframes fab-animation-reverse {
-    0% {
-      transform: rotate(45deg) scale(0.95);
-    }
-    20% {
-      transform: rotate(-15deg);
-    }
-    55% {
-      transform: rotate(10deg);
-    }
-    80% {
-      transform: rotate(-3deg);
-    }
-    100% {
-      transform: rotate(0) scale(1);
-    }
-  }
-  
-  @keyframes fac-animation {
-    0% {
-      transform: scale(1, 1);
-    }
-    33% {
-      transform: scale(0.95, 1.05);
-    }
-    66% {
-      transform: scale(1.05, 0.95);
-    }
-    100% {
-      transform: scale(1, 1);
-    }
-  }
-  */
+} */

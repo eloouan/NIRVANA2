@@ -194,67 +194,27 @@ const Map: React.FC<MapProps> = () => {
       "https://cdn3.iconfinder.com/data/icons/christmas-filled-7/128/christmas_48-32.png",
   };
 
-  const hiddenMarkers: Array<{
-    address?: string;
-    description?: string;
-    type?: string;
-    position: LatLngLiteral;
-    name?: string;
-  }> = [];
-
-  const visibleMarkers: Array<{
-    address?: string;
-    description?: string;
-    type?: string;
-    position: LatLngLiteral;
-    name?: string;
-  }> = [...offices, ...defaultPoi];
-
   const handleMarkerFilter = (type: string) => {
-    // Combine offices and defaultPoi arrays
     const allMarkers = [...offices, ...defaultPoi];
     for (let i = 0; i < allMarkers.length; i++) {
       const marker = allMarkers[i];
       console.log(marker.type, type);
-      console.log(
-        "visible?",
-        visibleMarkers.some((visibleMarker) => visibleMarker === marker),
-        "hidden?",
-        hiddenMarkers.some((hiddenMarker) => hiddenMarker === marker)
-      );
-      if (
-        marker.type !== type &&
-        visibleMarkers.some((visibleMarker) => visibleMarker === marker) // if marker in visibleMarkers
-      ) {
-        const indexInVisibleMarkers = visibleMarkers.findIndex(
-          // find index of visible marker
-          (visibleMarker) => visibleMarker === marker
-        );
-        visibleMarkers.splice(indexInVisibleMarkers, 1);
+
+      if (marker.type !== type && marker.position.lat - 45 < 1) {
         marker.position = {
           lat: marker.position.lat + 10,
           lng: marker.position.lng,
         };
-        hiddenMarkers.push(marker);
       }
       if (marker.type === type) {
-        const indexInHiddenMarkers = hiddenMarkers.indexOf(
-          // find index of marker in hidden marker
-          allMarkers[i]
-        );
-        console.log(indexInHiddenMarkers);
-        if (hiddenMarkers.some((hiddenMarker) => hiddenMarker === marker)) {
-          // if marker in hiddenMarkers
+        if (marker.position.lat > 46) {
           marker.position = {
-            lat: marker.position.lat - 20,
+            lat: marker.position.lat - 10,
             lng: marker.position.lng,
           };
-          visibleMarkers.push(marker);
-          hiddenMarkers.splice(indexInHiddenMarkers, 1);
         }
       }
       console.log(marker.position.lat);
-      console.log(visibleMarkers, hiddenMarkers);
       setSelectedMarker(marker);
     }
   };

@@ -9,7 +9,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>💫fuck Synchro💫</title>
       </Head>
-      <PreLoader/>
       <Component {...pageProps} />
       
     </>
