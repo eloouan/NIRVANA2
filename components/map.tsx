@@ -1,0 +1,568 @@
+import {
+  useState,
+  useMemo,
+  useCallback,
+  useRef,
+  useEffect,
+  Fragment,
+} from "react";
+import {
+  GoogleMap,
+  Marker,
+  DirectionsRenderer,
+  Circle,
+  MarkerClusterer,
+  InfoWindow,
+  MarkerProps,
+} from "@react-google-maps/api";
+import usePlacesAutocomplete, {
+  getGeocode,
+  getLatLng,
+} from "use-places-autocomplete";
+import Places from "./places";
+import Distance from "./distance";
+import MenuButton from "./menu-button";
+import Snowfall from "./snowfall";
+import SnowRoof from "./images/snow-roof-long.png";
+import cluster from "cluster";
+import FilterButton from "./filter-button"; // Update the path based on your file structure
+import { off } from "process";
+
+type LatLngLiteral = google.maps.LatLngLiteral;
+type DirectionsResult = google.maps.DirectionsResult;
+type MapOptions = google.maps.MapOptions;
+type MapProps = {};
+
+const Map: React.FC<MapProps> = () => {
+  const [officeMap1, setOfficeMap1] = useState<LatLngLiteral>();
+  const [directionsMap1, setDirectionsMap1] = useState<DirectionsResult>();
+  const [showMap1, setShowMap1] = useState(true);
+  const mapRefMap1 = useRef<GoogleMap>();
+
+  const [officeMap2, setOfficeMap2] = useState<LatLngLiteral>();
+  const [directionsMap2, setDirectionsMap2] = useState<DirectionsResult>();
+  const mapRefMap2 = useRef<GoogleMap>();
+
+  const addOffice = (
+    address: string,
+    description: string,
+    type: string,
+    position: LatLngLiteral
+  ) => {
+    setOffices((prevOffices) => [
+      ...prevOffices,
+      { address, description, type, position },
+    ]);
+  };
+
+  const center = useMemo<LatLngLiteral>(
+    () => ({ lat: 45.566580681555415, lng: 5.920610881510474 }),
+    []
+  );
+  const getMapOptions1 = (bounds: any) => ({
+    mapId: "dee71aef6bd0faf4",
+    disableDefaultUI: true,
+    clickableIcons: false,
+    restriction: {
+      latLngBounds: bounds,
+      strictBounds: true,
+    },
+  });
+  const getMapOptions2 = (bounds: any) => ({
+    mapId: "21b1f98b0685a8c2",
+    disableDefaultUI: true,
+    clickableIcons: false,
+    restriction: {
+      latLngBounds: bounds,
+      strictBounds: true,
+    },
+  });
+
+  const onLoadMap1 = useCallback((map) => (mapRefMap1.current = map), []);
+  const onLoadMap2 = useCallback((map) => (mapRefMap2.current = map), []);
+
+  const fetchDirectionsMap1 = (house: LatLngLiteral) => {
+    if (!officeMap1) return;
+
+    const service = new google.maps.DirectionsService();
+    service.route(
+      {
+        origin: house,
+        destination: officeMap1,
+        travelMode: google.maps.TravelMode.DRIVING,
+      },
+      (result, status) => {
+        if (status === "OK" && result) {
+          setDirectionsMap1(result);
+        }
+      }
+    );
+  };
+
+  const fetchDirectionsMap2 = (house: LatLngLiteral) => {
+    if (!officeMap2) return;
+
+    const service = new google.maps.DirectionsService();
+    service.route(
+      {
+        origin: house,
+        destination: officeMap2,
+        travelMode: google.maps.TravelMode.DRIVING,
+      },
+      (result, status) => {
+        if (status === "OK" && result) {
+          setDirectionsMap2(result);
+        }
+      }
+    );
+  };
+
+  const switchToMap1 = () => {
+    setShowMap1(true);
+  };
+
+  const switchToMap2 = () => {
+    setShowMap1(false);
+  };
+
+  const recenterMap = () => {
+    const currentMap = showMap1 ? mapRefMap1.current : mapRefMap2.current;
+    const officePosition = showMap1 ? officeMap1 : officeMap2;
+
+    if (currentMap && officePosition) {
+      currentMap.panTo(officePosition);
+    }
+  };
+
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [offices, setOffices] = useState<
+    Array<{
+      address: string;
+      description: string;
+      type: string;
+      position: LatLngLiteral;
+    }>
+  >([]);
+  const [markers, setMarkers] = useState<MarkerProps[]>([]);
+  const [markersLoaded, setMarkersLoaded] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuVisible(!menuVisible);
+  };
+
+  const createMarker = (type: string = "default") => {
+    if (offices.length > 0) {
+      const newMarkers = offices.map((office, index) => ({
+        position: office.position,
+        title: office.address,
+        description: office.description,
+        type: type,
+        key: `office-${index}`, // Use a unique key for each marker
+      }));
+
+      setMarkers((prevMarkers) => [...prevMarkers, ...newMarkers]);
+    }
+  };
+
+  useEffect(() => {
+    setMarkersLoaded(true);
+  }, []);
+
+  const [selectedMarker, setSelectedMarker] = useState<null | {
+    address: string;
+    description: string;
+    type: string;
+    position: { lat: number; lng: number };
+  }>(null);
+
+  const [selectedOffice, setSelectedOffice] = useState<null | {
+    address: string;
+    description: string;
+    type: string;
+    position: { lat: number; lng: number };
+  }>(null);
+
+  const markerIcons = {
+    restaurant: "https://cdn-icons-png.flaticon.com/32/8732/8732445.png",
+    shopping:
+      "https://cdn2.iconfinder.com/data/icons/christmas-filled-outline-1/512/christmas_holiday_merry_xmas_tree_5-32.png",
+    entertainement: "https://cdn-icons-png.flaticon.com/32/2503/2503508.png",
+    school: "https://cdn-icons-png.flaticon.com/32/2767/2767828.png",
+    park: "https://cdn-icons-png.flaticon.com/32/2203/2203973.png",
+    gym: "https://cdn-icons-png.flaticon.com/32/5764/5764179.png",
+    transport:
+      "https://cdn3.iconfinder.com/data/icons/christmas-filled-7/128/christmas_48-32.png",
+  };
+
+  const hiddenMarkers: Array<{
+    address?: string;
+    description?: string;
+    type?: string;
+    position: LatLngLiteral;
+    name?: string;
+  }> = [];
+
+  const visibleMarkers: Array<{
+    address?: string;
+    description?: string;
+    type?: string;
+    position: LatLngLiteral;
+    name?: string;
+  }> = [...offices, ...defaultPoi];
+
+  const handleMarkerFilter = (type: string) => {
+    // Combine offices and defaultPoi arrays
+    const allMarkers = [...offices, ...defaultPoi];
+    for (let i = 0; i < allMarkers.length; i++) {
+      const marker = allMarkers[i];
+      console.log(marker.type, type);
+      console.log(
+        "visible?",
+        visibleMarkers.some((visibleMarker) => visibleMarker === marker),
+        "hidden?",
+        hiddenMarkers.some((hiddenMarker) => hiddenMarker === marker)
+      );
+      if (
+        marker.type !== type &&
+        visibleMarkers.some((visibleMarker) => visibleMarker === marker) // if marker in visibleMarkers
+      ) {
+        const indexInVisibleMarkers = visibleMarkers.findIndex(
+          // find index of visible marker
+          (visibleMarker) => visibleMarker === marker
+        );
+        visibleMarkers.splice(indexInVisibleMarkers, 1);
+        marker.position = {
+          lat: marker.position.lat + 10,
+          lng: marker.position.lng,
+        };
+        hiddenMarkers.push(marker);
+      }
+      if (marker.type === type) {
+        const indexInHiddenMarkers = hiddenMarkers.indexOf(
+          // find index of marker in hidden marker
+          allMarkers[i]
+        );
+        console.log(indexInHiddenMarkers);
+        if (hiddenMarkers.some((hiddenMarker) => hiddenMarker === marker)) {
+          // if marker in hiddenMarkers
+          marker.position = {
+            lat: marker.position.lat - 20,
+            lng: marker.position.lng,
+          };
+          visibleMarkers.push(marker);
+          hiddenMarkers.splice(indexInHiddenMarkers, 1);
+        }
+      }
+      console.log(marker.position.lat);
+      console.log(visibleMarkers, hiddenMarkers);
+      setSelectedMarker(marker);
+    }
+  };
+
+  return (
+    <div className="container">
+      <div className="controls">
+        <Places
+          setOffice={(address, description, type, position) => {
+            showMap1 ? setOfficeMap1(position) : setOfficeMap2(position);
+            showMap1
+              ? mapRefMap1.current?.panTo(position)
+              : mapRefMap2.current?.panTo(position);
+            addOffice(address, description, type, position);
+          }}
+          createMarker={createMarker}
+        />
+      </div>
+
+      <div className="map">
+        {showMap1 ? (
+          <GoogleMap
+            key="dee71aef6bd0faf4"
+            zoom={13}
+            center={center}
+            mapContainerClassName="map-container"
+            options={getMapOptions1({
+              north: 45.7204559777248,
+              south: 45.46085230095994,
+              west: 5.741038693653954,
+              east: 6.073561468829906,
+            })}
+            onLoad={onLoadMap1}
+          >
+            <MarkerClusterer>
+              {(clusterer) =>
+                defaultPoi.map((poi, index) => (
+                  <Fragment key={index}>
+                    <Marker
+                      position={poi.position}
+                      title={poi.description}
+                      clusterer={clusterer}
+                      icon={{ url: markerIcons[poi.type] }}
+                      onClick={() => {
+                        fetchDirectionsMap1(poi.position);
+                        setSelectedMarker(poi);
+                      }}
+                    />
+                    {/* Add other marker customization here */}
+                    {selectedMarker === poi && (
+                      <InfoWindow
+                        position={poi.position}
+                        onCloseClick={() => setSelectedMarker(null)}
+                      >
+                        <div>
+                          <h3>{poi.description}</h3>
+                          <p>{poi.address}</p>
+                          {/* Add any additional information you want to display */}
+                        </div>
+                      </InfoWindow>
+                    )}
+                  </Fragment>
+                ))
+              }
+            </MarkerClusterer>
+
+            {directionsMap1 && (
+              <DirectionsRenderer
+                directions={directionsMap1}
+                options={{
+                  suppressMarkers: true,
+                  polylineOptions: {
+                    zIndex: 50,
+                    strokeColor: "#FF7676",
+                    strokeWeight: 5,
+                  },
+                }}
+              />
+            )}
+            {officeMap1 && (
+              <>
+                <Marker
+                  position={officeMap1}
+                  icon="https://cdn1.iconfinder.com/data/icons/christmas-98/595/Christmas_08-32.png"
+                />
+              </>
+            )}
+            {offices.map((office, index) => (
+              <Fragment key={`office-marker-${index}`}>
+                <Marker
+                  position={office.position}
+                  title={office.address}
+                  icon="https://cdn1.iconfinder.com/data/icons/joyful-christmas/56/christmas_house-32.png"
+                  onClick={() => {
+                    setSelectedOffice(office);
+                    fetchDirectionsMap1(office.position);
+                  }}
+                />
+                {selectedOffice &&
+                  selectedOffice.position === office.position && (
+                    <InfoWindow
+                      position={office.position}
+                      onCloseClick={() => setSelectedOffice(null)}
+                    >
+                      <div>
+                        <h3>{office.address}</h3>
+                        <p>{office.type}</p>
+                        {/* Add any additional information you want to display */}
+                      </div>
+                    </InfoWindow>
+                  )}
+              </Fragment>
+            ))}
+          </GoogleMap>
+        ) : (
+          <GoogleMap
+            key="21b1f98b0685a8c2"
+            zoom={13}
+            center={center}
+            mapContainerClassName="map-container"
+            options={getMapOptions2({
+              north: 45.7204559777248,
+              south: 45.46085230095994,
+              west: 5.741038693653954,
+              east: 6.073561468829906,
+            })}
+            onLoad={onLoadMap2}
+          >
+            {directionsMap2 && (
+              <DirectionsRenderer
+                directions={directionsMap2}
+                options={{
+                  polylineOptions: {
+                    zIndex: 50,
+                    strokeColor: "#396d7c",
+                    strokeWeight: 5,
+                  },
+                }}
+              />
+            )}
+            {officeMap2 && (
+              <>
+                <Marker
+                  position={officeMap2}
+                  icon="https://cdn1.iconfinder.com/data/icons/christmas-98/595/Christmas_08-32.png"
+                />
+              </>
+            )}
+            {offices.map((office, index) => (
+              <Fragment key={`office-marker-${index}`}>
+                <Marker
+                  position={office.position}
+                  title={office.address}
+                  icon="https://cdn1.iconfinder.com/data/icons/joyful-christmas/56/christmas_house-32.png"
+                  onClick={() => {
+                    setSelectedOffice(office);
+                    fetchDirectionsMap2(office.position);
+                  }}
+                />
+                {selectedOffice &&
+                  selectedOffice.position === office.position && (
+                    <InfoWindow
+                      position={office.position}
+                      onCloseClick={() => setSelectedOffice(null)}
+                    >
+                      <div>
+                        <h3>{office.address}</h3>
+
+                        {/* Add any additional information you want to display */}
+                      </div>
+                    </InfoWindow>
+                  )}
+              </Fragment>
+            ))}
+          </GoogleMap>
+        )}
+
+        <div className="candy-cane"></div>
+        <div className="header-snow-roof1"></div>
+        <div className="header-snow-roof2"></div>
+        <div className="header-snow-roof3"></div>
+        <div className="header-snow-roof4"></div>
+        <div className="candy-cane"></div>
+        <div className="menu-button" style={{ bottom: "20px", right: "10px" }}>
+          <button onClick={toggleMenu}>Open Menu</button>
+        </div>
+
+        {menuVisible && (
+          <div className="menu-inside">
+            <button className="login-button"></button>
+            <button>Button 2</button>
+            <button>Button 3</button>
+          </div>
+        )}
+
+        {/*<div className="menu-button" style={{ bottom: "10px", right: "10px" }}>
+          <MenuButton />
+        </div>*/}
+        <div className="map-buttons">
+          <button className="map1-button" onClick={switchToMap1}></button>
+          <button className="map2-button" onClick={switchToMap2}></button>
+        </div>
+        <button className="recenter-button" onClick={recenterMap}></button>
+        <Snowfall></Snowfall>
+        <FilterButton
+          markerTypes={[
+            "restaurant",
+            "shopping",
+            "entertainment",
+            "school",
+            "work",
+            "park",
+            "gym",
+            "transport",
+          ]}
+          onClick={(type) => handleMarkerFilter(type)}
+        />
+      </div>
+    </div>
+  );
+};
+
+const defaultOptions = {
+  strokeOpacity: 0.5,
+  strokeWeight: 2,
+  clickable: false,
+  draggable: false,
+  editable: false,
+  visible: true,
+};
+
+{
+  /*
+fetch("recup.php")
+.then( response => response.json())
+.then( data => {
+  const defaultPoi = data;
+    console.log(data);
+    // transformData(data);
+})
+*/
+}
+
+// Base de donnees exemple Chambery
+const defaultPoi = [
+  {
+    address: "32 Pl. Monge, 73000 Chambéry",
+    description: "Restaurant Carré des Sens - fine dining",
+    type: "restaurant",
+    position: {
+      lat: 45.56324311633563,
+      lng: 5.921157303181863,
+    },
+  },
+  {
+    address: "1097 Av. des Landiers, 73000 Chambéry",
+    description: "Shopping mall Chamnord",
+    type: "shopping",
+    position: {
+      lat: 45.59258489131312,
+      lng: 5.899454352402417,
+    },
+  },
+  {
+    address: "4 Rue Derrière les Murs, 73000 Chambéry",
+    description: "Pathe Movie Theatre",
+    type: "entertainment",
+    position: {
+      lat: 45.56769951499307,
+      lng: 5.918508726372975,
+    },
+  },
+  {
+    address: "Rue du Lac Majeur, 73370 Le Bourget-du-Lac",
+    description: "Universite Bourget du Lac",
+    type: "school",
+    position: {
+      lat: 45.641565952237485,
+      lng: 5.87271983174593,
+    },
+  },
+  {
+    address: "All. Ouahigouya, 73000 Chambéry",
+    description: "Park du Verney",
+    type: "park",
+    position: {
+      lat: 45.56954050075045,
+      lng: 5.9174064810826525,
+    },
+  },
+  {
+    address: "8 Rue Bonivard, 73000 Chambéry",
+    description: "KeepCool gym",
+    type: "gym",
+    position: {
+      lat: 45.566886527715134,
+      lng: 5.918076037055356,
+    },
+  },
+  {
+    address: "Pl. de la Gare, 73010 Chambéry",
+    description: "Train Station Chambery, Challes-les-eaux",
+    type: "transport",
+    position: {
+      lat: 45.57124197967436,
+      lng: 5.919697965999837,
+    },
+  },
+];
+
+export default Map;
