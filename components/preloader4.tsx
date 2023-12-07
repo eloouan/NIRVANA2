@@ -3,6 +3,7 @@ import { preLoaderAnim } from "../animations";
 
 const PreLoader = () => {
   useEffect(() => {
+    preLoaderAnim();
   }, []);
 
   return (
