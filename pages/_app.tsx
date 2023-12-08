@@ -6,7 +6,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>💫fuck Synchro💫</title>
+        <title>💫Fuck Synchro💫</title>
       </Head>
       <Component {...pageProps} />
     </>

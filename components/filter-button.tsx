@@ -2,11 +2,13 @@ import React, { useState } from "react";
 
 interface FilterButtonProps {
   markerTypes: string[];
+  displayTypes: string[];
   onClick: (type: string) => void;
 }
 
 const FilterButton: React.FC<FilterButtonProps> = ({
   markerTypes,
+  displayTypes,
   onClick,
 }) => {
   const [selectedType, setSelectedType] = useState<string | null>(null);
@@ -22,13 +24,13 @@ const FilterButton: React.FC<FilterButtonProps> = ({
 
   return (
     <div className="filter-menu">
-      {markerTypes.map((type, index) => (
-        <div key={index} className="filter-item">
-          <label className="filter-label">
+      {displayTypes.map((type, index) => (
+        <div className="filter-item" key={index}>
+          <label className="filter-label" title={markerTypes[index]}>
             <input
               type="checkbox"
               checked={selectedType === type}
-              onChange={() => handleFilter(type)}
+              onChange={() => handleFilter(markerTypes[index])}
             />
             {type}
           </label>

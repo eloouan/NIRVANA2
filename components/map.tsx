@@ -27,6 +27,7 @@ import SnowRoof from "./images/snow-roof-long.png";
 import cluster from "cluster";
 import FilterButton from "./filter-button"; // Update the path based on your file structure
 import { off } from "process";
+import InfoWindowWithForm from "./infoWindowWithForm";
 
 type LatLngLiteral = google.maps.LatLngLiteral;
 type DirectionsResult = google.maps.DirectionsResult;
@@ -183,7 +184,7 @@ const Map: React.FC<MapProps> = () => {
   }>(null);
 
   const markerIcons = {
-    restaurant: "https://cdn-icons-png.flaticon.com/32/8732/8732445.png",
+    restaurant: "https://cdn-icons-png.flaticon.com/32/3280/3280300.png",
     shopping:
       "https://cdn2.iconfinder.com/data/icons/christmas-filled-outline-1/512/christmas_holiday_merry_xmas_tree_5-32.png",
     entertainment: "https://cdn-icons-png.flaticon.com/32/2503/2503508.png",
@@ -265,16 +266,13 @@ const Map: React.FC<MapProps> = () => {
                     />
                     {/* Add other marker customization here */}
                     {selectedMarker === poi && (
-                      <InfoWindow
-                        position={poi.position}
+                      <InfoWindowWithForm
+                        office={poi}
                         onCloseClick={() => setSelectedMarker(null)}
-                      >
-                        <div>
-                          <h3>{poi.description}</h3>
-                          <p>{poi.address}</p>
-                          {/* Add any additional information you want to display */}
-                        </div>
-                      </InfoWindow>
+                        onDescriptionChange={(description: string) => {
+                          poi.description = description;
+                        }}
+                      />
                     )}
                   </Fragment>
                 ))
@@ -298,7 +296,7 @@ const Map: React.FC<MapProps> = () => {
               <>
                 <Marker
                   position={officeMap1}
-                  icon="https://cdn1.iconfinder.com/data/icons/christmas-98/595/Christmas_08-32.png"
+                  icon="https://cdn1.iconfinder.com/data/icons/joyful-christmas/56/christmas_house-32.png"
                 />
               </>
             )}
@@ -315,16 +313,13 @@ const Map: React.FC<MapProps> = () => {
                 />
                 {selectedOffice &&
                   selectedOffice.position === office.position && (
-                    <InfoWindow
-                      position={office.position}
+                    <InfoWindowWithForm
+                      office={office}
                       onCloseClick={() => setSelectedOffice(null)}
-                    >
-                      <div>
-                        <h3>{office.address}</h3>
-                        <p>{office.type}</p>
-                        {/* Add any additional information you want to display */}
-                      </div>
-                    </InfoWindow>
+                      onDescriptionChange={(description: string) => {
+                        office.description = description;
+                      }}
+                    />
                   )}
               </Fragment>
             ))}
@@ -359,7 +354,7 @@ const Map: React.FC<MapProps> = () => {
               <>
                 <Marker
                   position={officeMap2}
-                  icon="https://cdn1.iconfinder.com/data/icons/christmas-98/595/Christmas_08-32.png"
+                  icon="https://cdn1.iconfinder.com/data/icons/joyful-christmas/56/christmas_house-32.png"
                 />
               </>
             )}
@@ -392,6 +387,8 @@ const Map: React.FC<MapProps> = () => {
           </GoogleMap>
         )}
 
+        <Snowfall></Snowfall>
+
         <div className="candy-cane"></div>
         <div className="header-snow-roof1"></div>
         <div className="header-snow-roof2"></div>
@@ -418,7 +415,6 @@ const Map: React.FC<MapProps> = () => {
           <button className="map2-button" onClick={switchToMap2}></button>
         </div>
         <button className="recenter-button" onClick={recenterMap}></button>
-        <Snowfall></Snowfall>
         <FilterButton
           markerTypes={[
             "restaurant",
@@ -429,6 +425,7 @@ const Map: React.FC<MapProps> = () => {
             "gym",
             "transport",
           ]}
+          displayTypes={["🍗", "🎁", "🎥", "👨‍🏫", "🌲", "💪", "🚊"]}
           onClick={(type) => handleMarkerFilter(type)}
         />
       </div>
