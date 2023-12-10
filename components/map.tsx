@@ -6,6 +6,8 @@ import {
   useEffect,
   Fragment,
 } from "react";
+
+import { Link } from 'react-router-dom'
 import {
   GoogleMap,
   Marker,
@@ -135,6 +137,13 @@ const Map: React.FC<MapProps> = () => {
   };
 
   const [menuVisible, setMenuVisible] = useState(false);
+  const [loginVisible, setLoginVisible] = useState(false);
+  const toggleMenu = () => {
+    setMenuVisible(!menuVisible);
+  };
+  const toggleLoginPage = () => {
+    setLoginVisible(!loginVisible);
+  };
   const [offices, setOffices] = useState<
     Array<{
       address: string;
@@ -146,9 +155,7 @@ const Map: React.FC<MapProps> = () => {
   const [markers, setMarkers] = useState<MarkerProps[]>([]);
   const [markersLoaded, setMarkersLoaded] = useState(false);
 
-  const toggleMenu = () => {
-    setMenuVisible(!menuVisible);
-  };
+  
 
   const createMarker = (type: string = "default") => {
     if (offices.length > 0) {
@@ -399,16 +406,18 @@ const Map: React.FC<MapProps> = () => {
         <div className="header-snow-roof4"></div>
         <div className="candy-cane"></div>
         <div className="menu-button" style={{ bottom: "20px", right: "10px" }}>
-          <button onClick={toggleMenu}>Open Menu</button>
+        <div className="wrapper">
+          <input type="checkbox" />
+          <div className="fab"></div>
+          <div className="fac">
+              <Link to="/login">
+                  <button onClick={toggleLoginPage} className="login-button"></button>
+              </Link>
+              <Link to="/"><button>Map</button></Link>
+            </div>
+          </div>
         </div>
 
-        {menuVisible && (
-          <div className="menu-inside">
-            <button className="login-button"></button>
-            <button>Button 2</button>
-            <button>Button 3</button>
-          </div>
-        )}
 
         {/*<div className="menu-button" style={{ bottom: "10px", right: "10px" }}>
           <MenuButton />

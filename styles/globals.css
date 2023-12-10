@@ -1,3 +1,4 @@
+
 html,
 body {
   padding: 0;
@@ -6,6 +7,15 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   overflow: hidden;
 }
+
+h3 {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: white;
+  letter-spacing: 2px;
+  font-size: 3rem;
+}
+
 
 a {
   color: inherit;
@@ -280,7 +290,7 @@ a {
 }
 
 /* CSS de la preload*/
-/* .banner {
+.banner {
   position: relative;
   width: 100%;
   height: 100vh;
@@ -502,4 +512,285 @@ a {
           width: 240px;
       }
   }
-} */
+}
+
+
+
+/*CSS LOGIN PAGE*/
+
+
+.Loginheader {
+  width: 350px;
+  height: 400px;
+  margin: 0 auto;
+  background: rgba( 255, 255, 255, 0.1 );
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  backdrop-filter: blur( 3px );
+  -webkit-backdrop-filter: blur( 4px );
+  border-radius: 10px;
+  border: 1px solid rgba( 255, 255, 255, 0.18 );
+}
+
+.Loginusername,
+.Loginpassword {
+    display: flex;
+    justify-content: space-around;
+    border-radius: 50px;
+    align-items: center;
+    margin: 0 2.5rem 1rem 2.5rem;
+    outline: none;
+    border-style: none;
+    border: 1px solid #a3b18a;
+}
+
+input::placeholder {
+  color: #ddd;
+}
+
+p {
+  color: #ddd;
+}
+
+.Logincontainer {
+
+  background: url(../public/foret.jpg);
+    background-color: #eff8e2;
+    height: 100vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    accent-color: #4f772d;
+    font: "Lexend Deca", sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+.Logincontainer input {
+    padding: 0.75rem 1.5rem;
+    outline: none;
+    border-style: none;
+    background-color: transparent;
+    color: #ddd;
+}
+
+.Loginbuttons {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 3rem;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.Loginremember {
+  display: flex;
+  align-items: center;
+}
+
+.Logincheckbox {
+  outline: none;
+  border-style: none;
+  margin-right: 0.25rem;
+  padding: 1rem;
+}
+
+a {
+  text-decoration: none;
+  transition: all 0.3s;
+  color: #ddd;
+}
+
+a:hover {
+  opacity : 0.8
+}
+
+.Loginbtn-box {
+  display: flex;
+  justify-content: center;
+}
+
+.Loginbtn-box a {
+  padding: 0.5rem 1.5rem;
+  border-radius: 50px;
+  outline: none;
+  border-style: none;
+  width: 75%;
+  cursor: pointer;
+  transition: all 0.5s;
+  background-color: #fff;
+  text-align: center;
+  color: #a3b18a;
+}
+
+.Loginbtn-box a:hover {
+  opacity: 0.8;
+}
+.Loginregister {
+  display: flex;
+  justify-content: center;
+  font-style: 0.75rem;
+  margin-top: 4rem;
+  color: #a3b18a;
+}
+
+/* FIN DU CSS LOGIN COMPONENT */
+
+/* CSS Menu Button */
+:root {
+  --background: #4285f4;
+  --icon-color: #344955;
+  --width: 50px;
+  --height: 50px;
+  --border-radius: 100%;
+}
+
+.wrapper {
+  width: var(--width);
+  height: var(--height);
+  position: relative;
+  border-radius: var(--border-radius);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 6rem;
+}
+
+.fab {
+  background: var(--background);
+  width: var(--width);
+  height: var(--height);
+  position: relative;
+  z-index: 3;
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fab-animation-reverse 0.4s ease-out forwards;
+}
+
+.fab::before,
+.fab::after {
+  content: "";
+  display: block;
+  position: absolute;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.fab::before {
+  width: 4px;
+  height: 18px;
+}
+
+.fab::after {
+  width: 18px;
+  height: 4px;
+}
+
+.fac {
+  width: 32px;
+  height: 150px;
+  border-radius: 64px;
+  position: absolute;
+  background: #fff;
+  z-index: 2;
+  padding: 0.5rem 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  top: 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  transition: opacity 0.2s ease-in, top 0.2s ease-in, width 0.1s ease-in;
+}
+
+.fac a {
+  color: var(--icon-color);
+  opacity: 0.8;
+}
+
+.fac a:hover {
+  transition: 0.2s;
+  opacity: 1;
+  color: darken(#344955, 2%);
+}
+
+.fac input {
+  height: 100%;
+  width: 100%;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  position: absolute;
+  z-index: 5;
+  opacity: 0;
+}
+
+input:checked ~ .fab {
+  animation: fab-animation 0.4s ease-out forwards;
+}
+
+input:checked ~ .fac {
+  width: 32px;
+  height: 150px;
+  animation: fac-animation 0.4s ease-out forwards 0.1s;
+  top: 180px;
+  opacity: 1;
+}
+
+@keyframes fab-animation {
+  0% {
+    transform: rotate(0) scale(1);
+  }
+  20% {
+    transform: rotate(60deg) scale(0.93);
+  }
+  55% {
+    transform: rotate(35deg) scale(0.97);
+  }
+  80% {
+    transform: rotate(48deg) scale(0.94);
+  }
+  100% {
+    transform: rotate(45deg) scale(0.95);
+  }
+}
+
+@keyframes fab-animation-reverse {
+  0% {
+    transform: rotate(45deg) scale(0.95);
+  }
+  20% {
+    transform: rotate(-15deg);
+  }
+  55% {
+    transform: rotate(10deg);
+  }
+  80% {
+    transform: rotate(-3deg);
+  }
+  100% {
+    transform: rotate(0) scale(1);
+  }
+}
+
+@keyframes fac-animation {
+  0% {
+    transform: scale(1, 1);
+  }
+  33% {
+    transform: scale(0.95, 1.05);
+  }
+  66% {
+    transform: scale(1.05, 0.95);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
+/*FIN DU CSS MENU BUTTON */
