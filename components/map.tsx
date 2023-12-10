@@ -6,6 +6,8 @@ import {
   useEffect,
   Fragment,
 } from "react";
+
+import { Link } from 'react-router-dom'
 import {
   GoogleMap,
   Marker,
@@ -135,7 +137,6 @@ const Map: React.FC<MapProps> = () => {
     }
   };
 
-  const [menuVisible, setMenuVisible] = useState(false);
   const [offices, setOffices] = useState<
     Array<{
       address: string;
@@ -147,9 +148,7 @@ const Map: React.FC<MapProps> = () => {
   const [markers, setMarkers] = useState<MarkerProps[]>([]);
   const [markersLoaded, setMarkersLoaded] = useState(false);
 
-  const toggleMenu = () => {
-    setMenuVisible(!menuVisible);
-  };
+  
 
   const createMarker = (type: string = "default") => {
     if (offices.length > 0) {
@@ -396,129 +395,132 @@ const Map: React.FC<MapProps> = () => {
         <div className="header-snow-roof4"></div>
         <div className="candy-cane"></div>
         <div className="menu-button" style={{ bottom: "20px", right: "10px" }}>
-          <button onClick={toggleMenu}>Open Menu</button>
-        </div>
-
-        {menuVisible && (
-          <div className="menu-inside">
-            <button className="login-button"></button>
-            <button>Button 2</button>
-            <button>Button 3</button>
+        <div className="wrapper">
+          <input type="checkbox" />
+          <div className="fab"></div>
+          <div className="fac">
+              <Link to="/login">
+                  <button className="login-button"></button>
+              </Link>
+              <Link to="/"><button>Map</button></Link>
+            </div>
           </div>
-        )}
-
-        {/*<div className="menu-button" style={{ bottom: "10px", right: "10px" }}>
-          <MenuButton />
-        </div>*/}
-        <div className="map-buttons">
-          <button className="map1-button" onClick={switchToMap1}></button>
-          <button className="map2-button" onClick={switchToMap2}></button>
         </div>
-        <button className="recenter-button" onClick={recenterMap}></button>
-        <FilterButton
-          markerTypes={[
-            "restaurant",
-            "shopping",
-            "entertainment",
-            "school",
-            "park",
-            "gym",
-            "transport",
-          ]}
-          displayTypes={["🍗", "🎁", "🎥", "👨‍🏫", "🌲", "💪", "🚊"]}
-          onClick={(type) => handleMarkerFilter(type)}
-        />
-      </div>
-    </div>
-  );
+     )}
+56,
+
+{/*<div className="menu-button" style={{ bottom: "10px", right: "10px" }}>
+  <MenuButton />
+</div>*/}
+<div className="map-buttons">
+  <button className="map1-button" onClick={switchToMap1}></button>
+  <button className="map2-button" onClick={switchToMap2}></button>
+</div>
+<button className="recenter-button" onClick={recenterMap}></button>
+<FilterButton
+  markerTypes={[
+    "restaurant",
+    "shopping",
+    "entertainment",
+    "school",
+    "park",
+    "gym",
+    "transport",
+  ]}
+  displayTypes={["🍗", "🎁", "🎥", "👨‍🏫", "🌲", "💪", "🚊"]}
+  onClick={(type) => handleMarkerFilter(type)}
+/>
+</div>
+</div>
+);
 };
 
 const defaultOptions = {
-  strokeOpacity: 0.5,
-  strokeWeight: 2,
-  clickable: false,
-  draggable: false,
-  editable: false,
-  visible: true,
+strokeOpacity: 0.5,
+strokeWeight: 2,
+clickable: false,
+draggable: false,
+editable: false,
+visible: true,
 };
 
 {
-  /*
+/*
 fetch("recup.php")
 .then( response => response.json())
 .then( data => {
-  const defaultPoi = data;
-    console.log(data);
-    // transformData(data);
+const defaultPoi = data;
+console.log(data);
+// transformData(data);
 })
 */
 }
 
 // Base de donnees exemple Chambery
 const defaultPoi = [
-  {
-    address: "32 Pl. Monge, 73000 Chambéry",
-    description: "Restaurant Carré des Sens - fine dining",
-    type: "restaurant",
-    position: {
-      lat: 45.56324311633563,
-      lng: 5.921157303181863,
-    },
-  },
-  {
-    address: "1097 Av. des Landiers, 73000 Chambéry",
-    description: "Shopping mall Chamnord",
-    type: "shopping",
-    position: {
-      lat: 45.59258489131312,
-      lng: 5.899454352402417,
-    },
-  },
-  {
-    address: "4 Rue Derrière les Murs, 73000 Chambéry",
-    description: "Pathe Movie Theatre",
-    type: "entertainment",
-    position: {
-      lat: 45.56769951499307,
-      lng: 5.918508726372975,
-    },
-  },
-  {
-    address: "Rue du Lac Majeur, 73370 Le Bourget-du-Lac",
-    description: "Universite Bourget du Lac",
-    type: "school",
-    position: {
-      lat: 45.641565952237485,
-      lng: 5.87271983174593,
-    },
-  },
-  {
-    address: "All. Ouahigouya, 73000 Chambéry",
-    description: "Park du Verney",
-    type: "park",
-    position: {
-      lat: 45.56954050075045,
-      lng: 5.9174064810826525,
-    },
-  },
-  {
-    address: "8 Rue Bonivard, 73000 Chambéry",
-    description: "KeepCool gym",
-    type: "gym",
-    position: {
-      lat: 45.566886527715134,
-      lng: 5.918076037055356,
-    },
-  },
-  {
-    address: "Pl. de la Gare, 73010 Chambéry",
-    description: "Train Station Chambery, Challes-les-eaux",
-    type: "transport",
-    position: {
-      lat: 45.57124197967436,
-      lng: 5.919697965999837,
-    },
-  },
+{
+address: "32 Pl. Monge, 73000 Chambéry",
+description: "Restaurant Carré des Sens - fine dining",
+type: "restaurant",
+position: {
+lat: 45.56324311633563,
+lng: 5.921157303181863,
+},
+},
+{
+address: "1097 Av. des Landiers, 73000 Chambéry",
+description: "Shopping mall Chamnord",
+type: "shopping",
+position: {
+lat: 45.59258489131312,
+lng: 5.899454352402417,
+},
+},
+{
+address: "4 Rue Derrière les Murs, 73000 Chambéry",
+description: "Pathe Movie Theatre",
+type: "entertainment",
+position: {
+lat: 45.56769951499307,
+lng: 5.918508726372975,
+},
+},
+{
+address: "Rue du Lac Majeur, 73370 Le Bourget-du-Lac",
+description: "Universite Bourget du Lac",
+type: "school",
+position: {
+lat: 45.641565952237485,
+lng: 5.87271983174593,
+},
+},
+{
+address: "All. Ouahigouya, 73000 Chambéry",
+description: "Park du Verney",
+type: "park",
+position: {
+lat: 45.56954050075045,
+lng: 5.9174064810826525,
+},
+},
+{
+address: "8 Rue Bonivard, 73000 Chambéry",
+description: "KeepCool gym",
+type: "gym",
+position: {
+lat: 45.566886527715134,
+lng: 5.918076037055356,
+},
+},
+{
+address: "Pl. de la Gare, 73010 Chambéry",
+description: "Train Station Chambery, Challes-les-eaux",
+type: "transport",
+position: {
+lat: 45.57124197967436,
+lng: 5.919697965999837,
+},
+},
 ];
 
 export default Map;
