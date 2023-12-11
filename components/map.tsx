@@ -30,6 +30,7 @@ import cluster from "cluster";
 import FilterButton from "./filter-button";
 import { off } from "process";
 import InfoWindowWithForm from "./infoWindowWithForm";
+import axios from "axios";
 
 type LatLngLiteral = google.maps.LatLngLiteral;
 type DirectionsResult = google.maps.DirectionsResult;
@@ -37,6 +38,11 @@ type MapOptions = google.maps.MapOptions;
 type MapProps = {};
 
 const Map: React.FC<MapProps> = () => {
+  axios.get("https://l1.dptinfo-usmb.fr/~grp11/Tests/recup2.php")
+		    .then(response => {
+          console.log(response.data)
+		    })
+
   const [officeMap1, setOfficeMap1] = useState<LatLngLiteral>();
   const [directionsMap1, setDirectionsMap1] = useState<DirectionsResult>();
   const [showMap1, setShowMap1] = useState(true);

@@ -10,6 +10,7 @@
   "dependencies": {
     "@reach/combobox": "^0.16.5",
     "@react-google-maps/api": "^2.19.2",
+    "axios": "^1.6.2",
     "gsap": "^3.12.3",
     "next": "^12.3.4",
     "react": "17.0.2",
