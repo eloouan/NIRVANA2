@@ -32,8 +32,10 @@ const InfoWindowWithForm: React.FC<InfoWindowWithFormProps> = ({
       <div className="info-window-form">
         <h2>{office.address}</h2>
         <p>
-          <strong style={{ fontFamily: "Arial" }}>Type of place:</strong>{" "}
-          <strong>
+          <strong style={{ fontFamily: "Arial", color: "grey" }}>
+            Type of place:
+          </strong>{" "}
+          <strong style={{ color: "grey" }}>
             <i>{office.type}</i>
           </strong>
         </p>
