@@ -456,9 +456,16 @@ console.log(data);
 }
 
 // Base de donnees exemple Chambery
+type PointType = {
+  address: string;
+  description: string;
+  type: string;
+  coordX: string; 
+  coordY: string; 
+};
   axios.get("https://l1.dptinfo-usmb.fr/~grp11/Tests/recup2.php")
 		    .then(response => {
-          response.data.forEach(item => {
+          response.data.forEach((item : PointType) => {
             let point_a_add ={
               address: "",
               description: "",
