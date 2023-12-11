@@ -14,8 +14,8 @@ const loginsignup = () => {
   };
 
   const checkUser = () => {
-    const name = document.getElementById("name").value;
-    const password = document.getElementById("password").value;
+    const name = document.querySelector("#name").value;
+    const password = document.querySelector("#password").value;
     console.log(name);
     console.log(password);
     axios.get("https://l1.dptinfo-usmb.fr/~grp11/Tests/connexion2.php?+name="+name+"&password="+password)
@@ -60,10 +60,10 @@ const loginsignup = () => {
           <input type="checkbox" />
           <div className="fab"></div>
           <div className="fac">
-              <Link to="/login">
-                  <button onClick={toggleLoginPage} className="login-button"></button>
-              </Link>
               <Link to="/"><button>Map</button></Link>
+              <Link to="/admin">
+                <button>Admin</button>
+              </Link>
             </div>
           </div>
         </div>

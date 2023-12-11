@@ -5,6 +5,7 @@ import Head from 'next/head';
 import '../styles/globals.css';
 import PreLoader from '../components/preloader4';
 import LoginSignUp from '../components/loginsignup';
+import AdminPage from '../components/adminpage';
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -26,6 +27,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <Routes>
             <Route path="/login" element={<LoginSignUp />} />
             <Route path="/" element={<Component {...pageProps} />} />
+            <Route path="/admin" element={<AdminPage />} />
           </Routes>
         </BrowserRouter>
       )}

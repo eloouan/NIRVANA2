@@ -38,11 +38,6 @@ type MapOptions = google.maps.MapOptions;
 type MapProps = {};
 
 const Map: React.FC<MapProps> = () => {
-  axios.get("https://l1.dptinfo-usmb.fr/~grp11/Tests/recup2.php")
-		    .then(response => {
-          console.log(response.data)
-		    })
-
   const [officeMap1, setOfficeMap1] = useState<LatLngLiteral>();
   const [directionsMap1, setDirectionsMap1] = useState<DirectionsResult>();
   const [showMap1, setShowMap1] = useState(true);
@@ -406,8 +401,8 @@ const Map: React.FC<MapProps> = () => {
               <Link to="/login">
                 <button className="login-button"></button>
               </Link>
-              <Link to="/">
-                <button>Map</button>
+              <Link to="/admin">
+                <button>Admin</button>
               </Link>
             </div>
           </div>
@@ -461,7 +456,27 @@ console.log(data);
 }
 
 // Base de donnees exemple Chambery
-const defaultPoi = [
+  axios.get("https://l1.dptinfo-usmb.fr/~grp11/Tests/recup2.php")
+		    .then(response => {
+          response.data.forEach(item => {
+            let point_a_add ={
+              address: "",
+              description: "",
+              type: "",
+              position: {
+                lat: 45.57124197967436,
+                lng: 5.919697965999837,
+              },
+            };
+            point_a_add.address=item.address;//// JE DOIS REBUILD UN POINT POUR ENFIN LE ADD DANS LE DEFAULT POI
+            point_a_add.description=item.description;
+            point_a_add.type=item.type;
+            point_a_add.position.lat=parseFloat(item.coordX);
+            point_a_add.position.lng=parseFloat(item.coordY);
+            defaultPoi = [...defaultPoi, point_a_add];
+          });
+		    })
+let defaultPoi = [
   {
     address: "32 Pl. Monge, 73000 Chambéry",
     description: "Restaurant Carré des Sens - fine dining",
