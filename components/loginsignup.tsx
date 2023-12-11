@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 import { Link } from 'react-router-dom'
 
@@ -11,6 +12,17 @@ const loginsignup = () => {
   const toggleLoginPage = () => {
     setLoginVisible(!loginVisible);
   };
+
+  const checkUser = () => {
+    const name = document.getElementById("name").value;
+    const password = document.getElementById("password").value;
+    console.log(name);
+    console.log(password);
+    axios.get("https://l1.dptinfo-usmb.fr/~grp11/Tests/connexion2.php?+name="+name+"&password="+password)
+      .then(response => {
+        console.log(response.data);
+      })
+  }
   return (
       <div className="Logincontainer">
         <div className="Loginheader">
@@ -18,11 +30,11 @@ const loginsignup = () => {
           <div className="Logininputs">
           <div className="Loginusername">
             <img className="person" src="person.png"  />
-            <input type="text" />
+            <input id="name" name="name" type="text" />
             </div>
             <div className="Loginpassword">
             <img className="password" src="password.png" />
-            <input type="password" />
+            <input type="password" id="password" name="password"/>
             </div>
          </div>
          <div className="Loginbuttons">
@@ -33,7 +45,7 @@ const loginsignup = () => {
                 <p>Forgot Password</p>
             </div>
             <div className="Loginbtn-box">
-                <a href="#" target="_blank">Login</a>
+                <a onClick={checkUser} >Login</a>
             </div>
             <div className="Loginregister">
                 <p>Don't have an account?
