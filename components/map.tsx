@@ -36,6 +36,18 @@ type LatLngLiteral = google.maps.LatLngLiteral;
 type DirectionsResult = google.maps.DirectionsResult;
 type MapOptions = google.maps.MapOptions;
 type MapProps = {};
+type MarkerIconType = "restaurant" | "shopping" | "entertainment" | "school" | "park" | "gym" | "transport";
+
+
+const markerIcons: Record<string, string> = {
+  restaurant: "https://cdn-icons-png.flaticon.com/32/3280/3280300.png",
+  shopping: "https://cdn2.iconfinder.com/data/icons/christmas-filled-outline-1/512/christmas_holiday_merry_xmas_tree_5-32.png",
+  entertainment: "https://cdn-icons-png.flaticon.com/32/2503/2503508.png",
+  school: "https://cdn-icons-png.flaticon.com/32/2767/2767828.png",
+  park: "https://cdn-icons-png.flaticon.com/32/489/489969.png",
+  gym: "https://cdn-icons-png.flaticon.com/32/5764/5764179.png",
+  transport: "https://cdn3.iconfinder.com/data/icons/christmas-filled-7/128/christmas_48-32.png",
+};
 
 const Map: React.FC<MapProps> = () => {
   const [officeMap1, setOfficeMap1] = useState<LatLngLiteral>();
@@ -249,33 +261,37 @@ const Map: React.FC<MapProps> = () => {
             onLoad={onLoadMap1}
           >
             <MarkerClusterer>
-              {(clusterer) =>
-                defaultPoi.map((poi, index) => (
-                  <Fragment key={index}>
-                    <Marker
-                      position={poi.position}
-                      title={poi.description}
-                      clusterer={clusterer}
-                      icon={{ url: markerIcons[poi.type] }}
-                      onClick={() => {
-                        fetchDirectionsMap1(poi.position);
-                        setSelectedMarker(poi);
-                      }}
-                    />
-                    {/* marker customization here */}
-                    {selectedMarker === poi && (
-                      <InfoWindowWithForm
-                        office={poi}
-                        onCloseClick={() => setSelectedMarker(null)}
-                        onDescriptionChange={(description: string) => {
-                          poi.description = description;
-                        }}
-                      />
-                    )}
-                  </Fragment>
-                ))
-              }
-            </MarkerClusterer>
+                {(clusterer) => (
+                  <div>
+                    {defaultPoi.map((poi, index) => (
+                      <Fragment key={index}>
+                        <Marker
+                          position={poi.position}
+                          title={poi.description}
+                          clusterer={clusterer}
+                          icon={{ url: markerIcons[poi.type as MarkerIconType] }}
+                          onClick={() => {
+                            fetchDirectionsMap1(poi.position);
+                            setSelectedMarker(poi);
+                          }}
+                        />
+                        {/* Personnalisation du marqueur ici */}
+                        {selectedMarker === poi && (
+                          <InfoWindowWithForm
+                            office={poi}
+                            onCloseClick={() => setSelectedMarker(null)}
+                            onDescriptionChange={(description: string) => {
+                              poi.description = description;
+                            }}
+                          />
+                        )}
+                      </Fragment>
+                    ))}
+                  </div>
+                )}
+              </MarkerClusterer>
+
+
 
             {directionsMap1 && (
               <DirectionsRenderer
