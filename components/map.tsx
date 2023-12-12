@@ -463,7 +463,7 @@ type PointType = {
   coordX: string; 
   coordY: string; 
 };
-  axios.get("https://l1.dptinfo-usmb.fr/~grp11/Tests/recup2.php")
+  axios.get("https://l1.dptinfo-usmb.fr/~grp11/Tests/recup3.php")
 		    .then(response => {
           response.data.forEach((item : PointType) => {
             let point_a_add ={
