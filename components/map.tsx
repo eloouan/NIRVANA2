@@ -36,17 +36,50 @@ type LatLngLiteral = google.maps.LatLngLiteral;
 type DirectionsResult = google.maps.DirectionsResult;
 type MapOptions = google.maps.MapOptions;
 type MapProps = {};
-type MarkerIconType = "restaurant" | "shopping" | "entertainment" | "school" | "park" | "gym" | "transport";
+type MarkerIconType =
+  | "restaurant"
+  | "shopping"
+  | "cinema"
+  | "school"
+  | "park"
+  | "gym"
+  | "transport"
+  | "bar"
+  | "theater"
+  | "swimming pool"
+  | "ice cream shop"
+  | "church"
+  | "clothing store"
+  | "bakery"
+  | "hotel"
+  | "museum"
+  | "night club"
+  | "tourist attraction";
 
+const isLogged = false;
 
 const markerIcons: Record<string, string> = {
   restaurant: "https://cdn-icons-png.flaticon.com/32/3280/3280300.png",
-  shopping: "https://cdn2.iconfinder.com/data/icons/christmas-filled-outline-1/512/christmas_holiday_merry_xmas_tree_5-32.png",
-  entertainment: "https://cdn-icons-png.flaticon.com/32/2503/2503508.png",
+  shopping:
+    "https://cdn2.iconfinder.com/data/icons/christmas-filled-outline-1/512/christmas_holiday_merry_xmas_tree_5-32.png",
+  cinema: "https://cdn-icons-png.flaticon.com/32/2503/2503508.png",
   school: "https://cdn-icons-png.flaticon.com/32/2767/2767828.png",
   park: "https://cdn-icons-png.flaticon.com/32/489/489969.png",
   gym: "https://cdn-icons-png.flaticon.com/32/5764/5764179.png",
-  transport: "https://cdn3.iconfinder.com/data/icons/christmas-filled-7/128/christmas_48-32.png",
+  transport:
+    "https://cdn3.iconfinder.com/data/icons/christmas-filled-7/128/christmas_48-32.png",
+  bar: "https://cdn-icons-png.flaticon.com/32/8310/8310600.png",
+  theater: "https://cdn-icons-png.flaticon.com/32/2830/2830259.png",
+  "swimming pool": "https://cdn-icons-png.flaticon.com/32/495/495711.png",
+  "ice cream shop": "https://cdn-icons-png.flaticon.com/32/938/938063.png",
+  church: "https://cdn-icons-png.flaticon.com/32/619/619191.png",
+  "clothing store": "https://cdn-icons-png.flaticon.com/32/1415/1415746.png",
+  bakery: "https://cdn-icons-png.flaticon.com/32/992/992710.png",
+  hotel: "https://cdn-icons-png.flaticon.com/32/831/831477.png",
+  museum: "https://cdn-icons-png.flaticon.com/32/5190/5190904.png",
+  "night club": "https://cdn-icons-png.flaticon.com/32/4973/4973066.png",
+  "tourist attraction":
+    "https://cdn-icons-png.flaticon.com/32/4781/4781412.png",
 };
 
 const Map: React.FC<MapProps> = () => {
@@ -138,7 +171,9 @@ const Map: React.FC<MapProps> = () => {
   };
 
   const switchToMap2 = () => {
-    setShowMap1(false);
+    if (isLogged) {
+      setShowMap1(false);
+    }
   };
 
   const recenterMap = () => {
@@ -197,12 +232,24 @@ const Map: React.FC<MapProps> = () => {
     restaurant: "https://cdn-icons-png.flaticon.com/32/3280/3280300.png",
     shopping:
       "https://cdn2.iconfinder.com/data/icons/christmas-filled-outline-1/512/christmas_holiday_merry_xmas_tree_5-32.png",
-    entertainment: "https://cdn-icons-png.flaticon.com/32/2503/2503508.png",
+    cinema: "https://cdn-icons-png.flaticon.com/32/2503/2503508.png",
     school: "https://cdn-icons-png.flaticon.com/32/2767/2767828.png",
     park: "https://cdn-icons-png.flaticon.com/32/489/489969.png",
     gym: "https://cdn-icons-png.flaticon.com/32/5764/5764179.png",
     transport:
       "https://cdn3.iconfinder.com/data/icons/christmas-filled-7/128/christmas_48-32.png",
+    bar: "https://cdn-icons-png.flaticon.com/32/8310/8310600.png",
+    theater: "https://cdn-icons-png.flaticon.com/32/2830/2830259.png",
+    "swimming pool": "https://cdn-icons-png.flaticon.com/32/495/495711.png",
+    "ice cream shop": "https://cdn-icons-png.flaticon.com/32/938/938063.png",
+    church: "https://cdn-icons-png.flaticon.com/32/619/619191.png",
+    "clothing store": "https://cdn-icons-png.flaticon.com/32/1415/1415746.png",
+    bakery: "https://cdn-icons-png.flaticon.com/32/992/992710.png",
+    hotel: "https://cdn-icons-png.flaticon.com/32/831/831477.png",
+    museum: "https://cdn-icons-png.flaticon.com/32/5190/5190904.png",
+    "night club": "https://cdn-icons-png.flaticon.com/32/4973/4973066.png",
+    "tourist attraction":
+      "https://cdn-icons-png.flaticon.com/32/4781/4781412.png",
   };
 
   const handleMarkerFilter = (type: string) => {
@@ -261,37 +308,36 @@ const Map: React.FC<MapProps> = () => {
             onLoad={onLoadMap1}
           >
             <MarkerClusterer>
-                {(clusterer) => (
-                  <div>
-                    {defaultPoi.map((poi, index) => (
-                      <Fragment key={index}>
-                        <Marker
-                          position={poi.position}
-                          title={poi.description}
-                          clusterer={clusterer}
-                          icon={{ url: markerIcons[poi.type as MarkerIconType] }}
-                          onClick={() => {
-                            fetchDirectionsMap1(poi.position);
-                            setSelectedMarker(poi);
+              {(clusterer) => (
+                <div>
+                  {defaultPoi.map((poi, index) => (
+                    <Fragment key={index}>
+                      <Marker
+                        position={poi.position}
+                        title={poi.description}
+                        clusterer={clusterer}
+                        icon={{ url: markerIcons[poi.type as MarkerIconType] }}
+                        onClick={() => {
+                          fetchDirectionsMap1(poi.position);
+                          setSelectedMarker(poi);
+                        }}
+                      />
+                      {/* Personnalisation du marqueur ici */}
+                      {selectedMarker === poi && (
+                        <InfoWindowWithForm
+                          marker={poi}
+                          onCloseClick={() => setSelectedMarker(null)}
+                          onDescriptionChange={(description: string) => {
+                            poi.description = description;
                           }}
+                          disableDescription={true}
                         />
-                        {/* Personnalisation du marqueur ici */}
-                        {selectedMarker === poi && (
-                          <InfoWindowWithForm
-                            office={poi}
-                            onCloseClick={() => setSelectedMarker(null)}
-                            onDescriptionChange={(description: string) => {
-                              poi.description = description;
-                            }}
-                          />
-                        )}
-                      </Fragment>
-                    ))}
-                  </div>
-                )}
-              </MarkerClusterer>
-
-
+                      )}
+                    </Fragment>
+                  ))}
+                </div>
+              )}
+            </MarkerClusterer>
 
             {directionsMap1 && (
               <DirectionsRenderer
@@ -328,7 +374,7 @@ const Map: React.FC<MapProps> = () => {
                 {selectedOffice &&
                   selectedOffice.position === office.position && (
                     <InfoWindowWithForm
-                      office={office}
+                      marker={office}
                       onCloseClick={() => setSelectedOffice(null)}
                       onDescriptionChange={(description: string) => {
                         office.description = description;
@@ -339,6 +385,7 @@ const Map: React.FC<MapProps> = () => {
             ))}
           </GoogleMap>
         ) : (
+          /* map 2 */
           <GoogleMap
             key="21b1f98b0685a8c2"
             zoom={13}
@@ -424,25 +471,64 @@ const Map: React.FC<MapProps> = () => {
           </div>
         </div>
 
-        {/*<div className="menu-button" style={{ bottom: "10px", right: "10px" }}>
-  <MenuButton />
-</div>*/}
         <div className="map-buttons">
-          <button className="map1-button" onClick={switchToMap1}></button>
-          <button className="map2-button" onClick={switchToMap2}></button>
+          <button
+            className="map1-button"
+            onClick={switchToMap1}
+            title="Public Map"
+          ></button>
+          <button
+            className={`map2-button ${isLogged ? "" : "isNotLogged"}`}
+            onClick={switchToMap2}
+            title={
+              isLogged
+                ? "Private Map"
+                : "Private Map\nFeature Locked! You must be logged in"
+            }
+          ></button>
         </div>
         <button className="recenter-button" onClick={recenterMap}></button>
         <FilterButton
           markerTypes={[
             "restaurant",
             "shopping",
-            "entertainment",
+            "cinema",
             "school",
             "park",
             "gym",
             "transport",
+            "bar",
+            "theater",
+            "swimming pool",
+            "ice cream shop",
+            "church",
+            "clothing store",
+            "bakery",
+            "hotel",
+            "museum",
+            "night club",
+            "tourist attraction",
           ]}
-          displayTypes={["🍗", "🎁", "🎥", "👨‍🏫", "🌲", "💪", "🚊"]}
+          displayTypes={[
+            "🍗",
+            "🎁",
+            "🎥",
+            "👨‍🏫",
+            "🌲",
+            "💪",
+            "🚊",
+            "🍺",
+            "🎭",
+            "🏊",
+            "🍦",
+            "⛪",
+            "👜",
+            "🥐",
+            "🛏️",
+            "🎨",
+            "🍸",
+            "🗿",
+          ]}
           onClick={(type) => handleMarkerFilter(type)}
         />
       </div>
@@ -472,33 +558,43 @@ console.log(data);
 }
 
 // Base de donnees exemple Chambery
+type ItemType = {
+  address: string;
+  description: string;
+  type: string;
+  coordX: string;
+  coordY: string;
+};
+
 type PointType = {
   address: string;
   description: string;
   type: string;
-  coordX: string; 
-  coordY: string; 
+  position: { lat: number; lng: number };
 };
-  axios.get("https://l1.dptinfo-usmb.fr/~grp11/Tests/recup3.php")
-		    .then(response => {
-          response.data.forEach((item : PointType) => {
-            let point_a_add ={
-              address: "",
-              description: "",
-              type: "",
-              position: {
-                lat: 45.57124197967436,
-                lng: 5.919697965999837,
-              },
-            };
-            point_a_add.address=item.address;//// JE DOIS REBUILD UN POINT POUR ENFIN LE ADD DANS LE DEFAULT POI
-            point_a_add.description=item.description;
-            point_a_add.type=item.type;
-            point_a_add.position.lat=parseFloat(item.coordX);
-            point_a_add.position.lng=parseFloat(item.coordY);
-            defaultPoi = [...defaultPoi, point_a_add];
-          });
-		    })
+
+axios
+  .get("https://l1.dptinfo-usmb.fr/~grp11/Tests/recup3.php")
+  .then((response) => {
+    response.data.forEach((item: ItemType) => {
+      let point_a_add = {
+        address: "",
+        description: "",
+        type: "",
+        position: {
+          lat: 45.57124197967436,
+          lng: 5.919697965999837,
+        },
+      };
+      point_a_add.address = item.address; //// JE DOIS REBUILD UN POINT POUR ENFIN LE ADD DANS LE DEFAULT POI
+      point_a_add.description = item.description;
+      point_a_add.type = item.type;
+      point_a_add.position.lat = parseFloat(item.coordX);
+      point_a_add.position.lng = parseFloat(item.coordY);
+      defaultPoi = [...defaultPoi, point_a_add];
+    });
+  });
+
 let defaultPoi = [
   {
     address: "32 Pl. Monge, 73000 Chambéry",
@@ -519,30 +615,12 @@ let defaultPoi = [
     },
   },
   {
-    address: "4 Rue Derrière les Murs, 73000 Chambéry",
-    description: "Pathe Movie Theatre",
-    type: "entertainment",
-    position: {
-      lat: 45.56769951499307,
-      lng: 5.918508726372975,
-    },
-  },
-  {
     address: "Rue du Lac Majeur, 73370 Le Bourget-du-Lac",
     description: "Universite Bourget du Lac",
     type: "school",
     position: {
       lat: 45.641565952237485,
       lng: 5.87271983174593,
-    },
-  },
-  {
-    address: "All. Ouahigouya, 73000 Chambéry",
-    description: "Park du Verney",
-    type: "park",
-    position: {
-      lat: 45.56954050075045,
-      lng: 5.9174064810826525,
     },
   },
   {
@@ -564,5 +642,36 @@ let defaultPoi = [
     },
   },
 ];
+
+let user_id = null; //RAPPEL TOI
+
+if (isLogged) {
+  axios
+    .get(
+      "https://l1.dptinfo-usmb.fr/~grp11/Tests/recup_by_user_id.php?user_id=" +
+        user_id
+    )
+    .then((response) => {
+      response.data.forEach((item: ItemType) => {
+        let point_a_add = {
+          address: "",
+          description: "",
+          type: "",
+          position: {
+            lat: 45.57124197967436,
+            lng: 5.919697965999837,
+          },
+        };
+        point_a_add.address = item.address; //// JE DOIS REBUILD UN POINT POUR ENFIN LE ADD DANS LE DEFAULT POI
+        point_a_add.description = item.description;
+        point_a_add.type = item.type;
+        point_a_add.position.lat = parseFloat(item.coordX);
+        point_a_add.position.lng = parseFloat(item.coordY);
+        offices = [...offices, point_a_add];
+      });
+    });
+}
+
+let offices: PointType[] = [];
 
 export default Map;

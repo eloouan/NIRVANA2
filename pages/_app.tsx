@@ -1,29 +1,31 @@
-import { useEffect } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import type { AppProps } from 'next/app';
-import Head from 'next/head';
-import '../styles/globals.css';
-import PreLoader from '../components/preloader4';
-import LoginSignUp from '../components/loginsignup';
-import AdminPage from '../components/adminpage';
+import { useEffect, useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import type { AppProps } from "next/app";
+import Head from "next/head";
+import "../styles/globals.css";
+import PreLoader from "../components/preloader4";
+import LoginSignUp from "../components/loginsignup";
+import AdminPage from "../components/adminpage";
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     // Le code ici sera exécuté que côté client OMG 5 HEURES DE DEBUGG ET FORUM POUR RESOUDRE MON SOUCIS DE ROUTES
-    const { createBrowserHistory } = require('@remix-run/router');
-    const { BrowserRouter } = require('react-router-dom');
+    const { createBrowserHistory } = require("@remix-run/router");
+    const { BrowserRouter } = require("react-router-dom");
   }, []);
+
+  // const [isLogged, setIsLogged] = useState<Boolean>(false); ca marche pas bien, j'y ai passee 20 minutes + chatgpt mais jdois partir, good luck!
 
   return (
     <>
       <Head>
-        <title>💫fuck Synchro💫</title>
+        <title>💫Fuck Synchro💫</title>
       </Head>
 
       {/* Utilisation de BrowserRouter à l'intérieur de useEffect pour éviter l'exécution côté serveur */}
-      {typeof window !== 'undefined' && (
+      {typeof window !== "undefined" && (
         <BrowserRouter>
-        <PreLoader/>
+          <PreLoader />
           <Routes>
             <Route path="/login" element={<LoginSignUp />} />
             <Route path="/" element={<Component {...pageProps} />} />

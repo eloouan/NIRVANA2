@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { InfoWindow } from "@react-google-maps/api";
 
 interface InfoWindowWithFormProps {
-  office: {
+  marker: {
     address: string;
     description: string;
     type: string;
@@ -12,14 +12,16 @@ interface InfoWindowWithFormProps {
   };
   onCloseClick: () => void;
   onDescriptionChange: (description: string) => void;
+  disableDescription?: boolean; // New prop to disable modification
 }
 
 const InfoWindowWithForm: React.FC<InfoWindowWithFormProps> = ({
-  office,
+  marker,
   onCloseClick,
   onDescriptionChange,
+  disableDescription = false, // Default value is false
 }) => {
-  const [formDescription, setFormDescription] = useState(office.description);
+  const [formDescription, setFormDescription] = useState(marker.description);
 
   const handleFormSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -28,15 +30,15 @@ const InfoWindowWithForm: React.FC<InfoWindowWithFormProps> = ({
   };
 
   return (
-    <InfoWindow position={office.position} onCloseClick={onCloseClick}>
+    <InfoWindow position={marker.position} onCloseClick={onCloseClick}>
       <div className="info-window-form">
-        <h2>{office.address}</h2>
+        <h2>{marker.address}</h2>
         <p>
           <strong style={{ fontFamily: "Arial", color: "grey" }}>
             Type of place:
           </strong>{" "}
           <strong style={{ color: "grey" }}>
-            <i>{office.type}</i>
+            <i>{marker.type}</i>
           </strong>
         </p>
         <form onSubmit={handleFormSubmit}>
@@ -48,13 +50,18 @@ const InfoWindowWithForm: React.FC<InfoWindowWithFormProps> = ({
             <textarea
               className="custom-textarea"
               value={formDescription}
-              onChange={(e) => setFormDescription(e.target.value)}
+              onChange={(e) =>
+                !disableDescription && setFormDescription(e.target.value)
+              }
+              readOnly={disableDescription} // Make textarea read-only if modification is disabled
             />
           </label>
           <div className="save-button-container">
-            <button className="save-button" type="submit">
-              Save
-            </button>
+            {!disableDescription && (
+              <button className="save-button" type="submit">
+                Save
+              </button>
+            )}
           </div>
         </form>
       </div>

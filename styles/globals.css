@@ -216,7 +216,7 @@ a {
   color: white;
   padding: 10px;
   cursor: pointer;
-  transition: background-size 0.5s ease-in-out, transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  transition: background-size 0.4s ease-in-out, transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
 }
 
 .map1-button:hover {
@@ -225,21 +225,38 @@ a {
 }
 
 .map2-button {
+  position: relative;
   height: 80px;
   width: 80px;
   background: url('images/night-layer-map2.png');
   background-size: cover;
-  background-color: rgb(123, 120, 120);
+  background-color: rgba(123, 120, 120, 0.8);
   border: 2px solid rgb(123, 120, 120);
   border-radius: 14px;
   color: white;
   padding: 10px;
   cursor: pointer;
-  transition: background-size 0.5s ease-in-out, transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  transition: background-size 0.4s ease-in-out, transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  backdrop-filter: blur(100px);
+}
+
+.map2-button.isNotLogged::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('images/locked.png') center center/cover no-repeat;
+  background-size: 78%;
+  background-color: rgba(57, 60, 64, 0.5);
+  border-radius: inherit; 
+  z-index: 1;
+  backdrop-filter: none;
 }
 
 .map2-button:hover {
-  background-color: rgba(19, 123, 242, 0.3);
+  background-color: rgba(87, 113, 143, 0.3);
   transform: scale(1.1);
 }
 
