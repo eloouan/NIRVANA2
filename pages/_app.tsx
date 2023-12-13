@@ -11,7 +11,6 @@ import AdminPage from "../components/adminpage";
 import { AuthProvider } from "../pages/AuthContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [isLogged, setisLogged] = useState(false);
   
   useEffect(() => {
     // Le code ici sera exécuté que côté client OMG 5 HEURES DE DEBUGG ET FORUM POUR RESOUDRE MON SOUCIS DE ROUTES

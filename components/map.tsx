@@ -35,10 +35,6 @@ import { off } from "process";
 import InfoWindowWithForm from "./infoWindowWithForm";
 import axios from "axios";
 
-interface MapsProps {
-  isLogged: boolean;
-  setisLogged: React.Dispatch<React.SetStateAction<boolean>>;
-}
 
 type LatLngLiteral = google.maps.LatLngLiteral;
 type DirectionsResult = google.maps.DirectionsResult;
@@ -105,7 +101,7 @@ const markerIcons: Record<string, string> = {
 };
 
 const Map: React.FC<MapProps> = () => {
-  const { isLogged,userId, setisLogged,setuserId} = useAuth();
+  const { isLogged, isAdmin, userId, setisLogged, setuserId, setisAdmin} = useAuth();
   const [officeMap1, setOfficeMap1] = useState<LatLngLiteral>();
   const [directionsMap1, setDirectionsMap1] = useState<DirectionsResult>();
   const [showMap1, setShowMap1] = useState(true);
@@ -126,6 +122,7 @@ const Map: React.FC<MapProps> = () => {
       ...prevOffices,
       { address, description, type, position },
     ]);
+    //Il faut ici push vers la bdd avec un axios et le bon service pour sauvegarder le points nouvellement creer
   };
 
   const center = useMemo<LatLngLiteral>(
@@ -380,6 +377,7 @@ const Map: React.FC<MapProps> = () => {
                           onCloseClick={() => setSelectedMarker(null)}
                           onDescriptionChange={(description: string) => {
                             poi.description = description;
+                            //IL faut ici push la nouvelle description dans la base de donné avec un axios et le bon services
                           }}
                           disableDescription={true}
                         />
