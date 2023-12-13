@@ -15,6 +15,7 @@ if(isset($_GET["name"])){
 	$password_crypte = hash('sha256', $password);
 	$user_id = -2;
 	$loginSuccessful = false;
+	$isadmin = false;
 
 	while($result = mysqli_fetch_assoc($query)){
 
@@ -23,6 +24,8 @@ if(isset($_GET["name"])){
 			
 			if ($result['admin'] == 1){
 				$_SESSION['admin'] = time();
+				$isadmin = true;
+				
 			}
 			$loginSuccessful = true;
 			break;
@@ -30,6 +33,6 @@ if(isset($_GET["name"])){
 	}
 	include 'db_disconnect.php';
 
-	echo json_encode(["loginSuccessful" => $loginSuccessful, 'user_id' => $_SESSION["id"]]);
+	echo json_encode(["loginSuccessful" => $loginSuccessful, 'user_id' => $_SESSION["id"],"isadmin" => $isadmin,]);
 
 }

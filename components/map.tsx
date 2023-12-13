@@ -110,7 +110,8 @@ const Map: React.FC<MapProps> = () => {
   const [officeMap2, setOfficeMap2] = useState<LatLngLiteral>();
   const [directionsMap2, setDirectionsMap2] = useState<DirectionsResult>();
   const mapRefMap2 = useRef<GoogleMap>();
-  console.log(isLogged);
+  console.log("Logged"+isLogged);
+  console.log("Admin" + isAdmin);
   console.log(userId);
   const addOffice = (
     address: string,
