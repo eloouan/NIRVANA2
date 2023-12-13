@@ -2,8 +2,15 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import { Link } from 'react-router-dom'
+interface LoginSignUpProps {
+  isLogged: boolean;
+  setisLogged: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-const loginsignup = () => {
+const loginsignup: React.FC<LoginSignUpProps> = ({ isLogged, setisLogged }) => {
+  console.log(isLogged);
+  setisLogged(true);
+  console.log(isLogged);
   const [menuVisible, setMenuVisible] = useState(false);
   const [loginVisible, setLoginVisible] = useState(false);
   const toggleMenu = () => {
@@ -20,8 +27,14 @@ const loginsignup = () => {
     console.log(password);
     axios.get("https://l1.dptinfo-usmb.fr/~grp11/Tests/connexion2.php?+name="+name+"&password="+password)
       .then(response => {
-        console.log(response.data);
-      })
+        const data = response.data;
+        if (data.loginSuccessful) {
+        window.location.href = '/';
+        //Il faut ici changer le IsLogged en true et recup le user_id
+        } else {
+        // Message d'echec de connexion à écrire
+        }
+  })
   }
   return (
       <div className="Logincontainer">

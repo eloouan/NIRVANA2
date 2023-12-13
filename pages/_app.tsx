@@ -8,13 +8,13 @@ import LoginSignUp from "../components/loginsignup";
 import AdminPage from "../components/adminpage";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const [isLogged, setisLogged] = useState(false);
+  
   useEffect(() => {
     // Le code ici sera exécuté que côté client OMG 5 HEURES DE DEBUGG ET FORUM POUR RESOUDRE MON SOUCIS DE ROUTES
     const { createBrowserHistory } = require("@remix-run/router");
     const { BrowserRouter } = require("react-router-dom");
   }, []);
-
-  // const [isLogged, setIsLogged] = useState<Boolean>(false); ca marche pas bien, j'y ai passee 20 minutes + chatgpt mais jdois partir, good luck!
 
   return (
     <>
@@ -27,11 +27,12 @@ function MyApp({ Component, pageProps }: AppProps) {
         <BrowserRouter>
           <PreLoader />
           <Routes>
-            <Route path="/login" element={<LoginSignUp />} />
-            <Route path="/" element={<Component {...pageProps} />} />
+            <Route path="/login" element={<LoginSignUp isLogged={isLogged} setisLogged={setisLogged} />} />
+            <Route path="/" element={<Component  {...pageProps} isLogged={isLogged} setisLogged={setisLogged}/>} />
             <Route path="/admin" element={<AdminPage />} />
           </Routes>
         </BrowserRouter>
+        
       )}
     </>
   );

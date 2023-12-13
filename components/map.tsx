@@ -32,6 +32,11 @@ import { off } from "process";
 import InfoWindowWithForm from "./infoWindowWithForm";
 import axios from "axios";
 
+interface MapsProps {
+  isLogged: boolean;
+  setisLogged: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
 type LatLngLiteral = google.maps.LatLngLiteral;
 type DirectionsResult = google.maps.DirectionsResult;
 type MapOptions = google.maps.MapOptions;
@@ -56,7 +61,21 @@ type MarkerIconType =
   | "night club"
   | "tourist attraction";
 
-const isLogged = false;
+  type ItemType = {
+    address: string;
+    description: string;
+    type: string;
+    coordX: string;
+    coordY: string;
+  };
+  
+  type PointType = {
+    address: string;
+    description: string;
+    type: string;
+    position: { lat: number; lng: number };
+  };
+
 
 const markerIcons: Record<string, string> = {
   restaurant: "https://cdn-icons-png.flaticon.com/32/3280/3280300.png",
@@ -82,7 +101,8 @@ const markerIcons: Record<string, string> = {
     "https://cdn-icons-png.flaticon.com/32/4781/4781412.png",
 };
 
-const Map: React.FC<MapProps> = () => {
+const Map: React.FC<MapProps & MapsProps> = ({ isLogged, setisLogged }) => {
+  console.log(isLogged);
   const [officeMap1, setOfficeMap1] = useState<LatLngLiteral>();
   const [directionsMap1, setDirectionsMap1] = useState<DirectionsResult>();
   const [showMap1, setShowMap1] = useState(true);
@@ -558,20 +578,7 @@ console.log(data);
 }
 
 // Base de donnees exemple Chambery
-type ItemType = {
-  address: string;
-  description: string;
-  type: string;
-  coordX: string;
-  coordY: string;
-};
 
-type PointType = {
-  address: string;
-  description: string;
-  type: string;
-  position: { lat: number; lng: number };
-};
 
 axios
   .get("https://l1.dptinfo-usmb.fr/~grp11/Tests/recup3.php")
@@ -645,32 +652,7 @@ let defaultPoi = [
 
 let user_id = null; //RAPPEL TOI
 
-if (isLogged) {
-  axios
-    .get(
-      "https://l1.dptinfo-usmb.fr/~grp11/Tests/recup_by_user_id.php?user_id=" +
-        user_id
-    )
-    .then((response) => {
-      response.data.forEach((item: ItemType) => {
-        let point_a_add = {
-          address: "",
-          description: "",
-          type: "",
-          position: {
-            lat: 45.57124197967436,
-            lng: 5.919697965999837,
-          },
-        };
-        point_a_add.address = item.address; //// JE DOIS REBUILD UN POINT POUR ENFIN LE ADD DANS LE DEFAULT POI
-        point_a_add.description = item.description;
-        point_a_add.type = item.type;
-        point_a_add.position.lat = parseFloat(item.coordX);
-        point_a_add.position.lng = parseFloat(item.coordY);
-        offices = [...offices, point_a_add];
-      });
-    });
-}
+
 
 let offices: PointType[] = [];
 
