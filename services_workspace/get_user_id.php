@@ -2,4 +2,6 @@
 header("Access-Control-Allow-Origin: *");
 session_start();
 
-echo $_SESSION['id'];
+$res = array( "id_user" => $_SESSION['id']);
+
+echo json_encode($res);

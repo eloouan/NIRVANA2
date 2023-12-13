@@ -13,6 +13,7 @@ if(isset($_GET["name"])){
 	$name = $_GET['name'];
 	$password = $_GET['password'];
 	$password_crypte = hash('sha256', $password);
+	$user_id = -2;
 	$loginSuccessful = false;
 
 	while($result = mysqli_fetch_assoc($query)){
@@ -28,7 +29,7 @@ if(isset($_GET["name"])){
 		} 
 	}
 	include 'db_disconnect.php';
-	
-	echo json_encode(["loginSuccessful" => $loginSuccessful]);
+
+	echo json_encode(["loginSuccessful" => $loginSuccessful, 'user_id' => $_SESSION["id"]]);
 
 }

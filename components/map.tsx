@@ -105,7 +105,7 @@ const markerIcons: Record<string, string> = {
 };
 
 const Map: React.FC<MapProps> = () => {
-  const { isLogged, setisLogged } = useAuth();
+  const { isLogged,userId, setisLogged,setuserId} = useAuth();
   const [officeMap1, setOfficeMap1] = useState<LatLngLiteral>();
   const [directionsMap1, setDirectionsMap1] = useState<DirectionsResult>();
   const [showMap1, setShowMap1] = useState(true);
@@ -115,6 +115,7 @@ const Map: React.FC<MapProps> = () => {
   const [directionsMap2, setDirectionsMap2] = useState<DirectionsResult>();
   const mapRefMap2 = useRef<GoogleMap>();
   console.log(isLogged);
+  console.log(userId);
   const addOffice = (
     address: string,
     description: string,
@@ -149,6 +150,33 @@ const Map: React.FC<MapProps> = () => {
       strictBounds: true,
     },
   });
+
+  if (isLogged) {
+    axios
+    .get("https://l1.dptinfo-usmb.fr/~grp11/Tests/get_private_points.php?user_id="+userId)
+    .then((response) => {
+      response.data.forEach((item: ItemType) => {
+        let point_a_add = {
+          address: "",
+          description: "",
+          type: "",
+          position: {
+            lat: 45.57124197967436,
+            lng: 5.919697965999837,
+          },
+        };
+        point_a_add.address = item.address; //// JE DOIS REBUILD UN POINT POUR ENFIN LE ADD DANS LE DEFAULT POI
+        point_a_add.description = item.description;
+        point_a_add.type = item.type;
+        point_a_add.position.lat = parseFloat(item.coordX);
+        point_a_add.position.lng = parseFloat(item.coordY);
+        privatePoi = [...privatePoi, point_a_add];
+      });
+    });
+  }
+
+  
+
 
   const onLoadMap1 = useCallback((map) => (mapRefMap1.current = map), []);
   const onLoadMap2 = useCallback((map) => (mapRefMap2.current = map), []);
@@ -208,7 +236,7 @@ const Map: React.FC<MapProps> = () => {
     }
   };
 
-  const [offices, setOffices] = useState<
+  let [offices, setOffices] = useState<
     Array<{
       address: string;
       description: string;
@@ -442,7 +470,7 @@ const Map: React.FC<MapProps> = () => {
                 />
               </>
             )}
-            {offices.map((office, index) => (
+            {privatePoi.map((office, index) => (
               <Fragment key={`office-marker-${index}`}>
                 <Marker
                   position={office.position}
@@ -584,7 +612,7 @@ console.log(data);
 
 
 axios
-  .get("https://l1.dptinfo-usmb.fr/~grp11/Tests/recup3.php")
+  .get("https://l1.dptinfo-usmb.fr/~grp11/Tests/get_default_points.php")
   .then((response) => {
     response.data.forEach((item: ItemType) => {
       let point_a_add = {
@@ -655,8 +683,16 @@ let defaultPoi = [
 
 let user_id = null; //RAPPEL TOI
 
-
-
-let offices: PointType[] = [];
+let privatePoi = [
+  {
+    address: "32 Pl. Monge, 73000 Chambéry",
+    description: "Restaurant Carré des Sens - fine dining",
+    type: "restaurant",
+    position: {
+      lat: 45.56324311633563,
+      lng: 5.921157303181863,
+    },
+  },
+];
 
 export default Map;
