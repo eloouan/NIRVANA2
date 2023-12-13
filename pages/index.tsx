@@ -1,12 +1,18 @@
-import { useLoadScript } from "@react-google-maps/api";
+// @refresh disable
+
+import { useLoadScript, Libraries } from "@react-google-maps/api";
+import { AuthProvider } from "../pages/AuthContext";
 import Map from "../components/map";
 
-export default function Home({ isLogged, setisLogged }: { isLogged: boolean, setisLogged: React.Dispatch<React.SetStateAction<boolean>> }) {
+// Définissez les bibliothèques en dehors de la fonction du composant
+const libraries2: Libraries = ["places"];
+
+export default function Home() {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-    libraries: ["places"],
+    libraries: libraries2,
   });
 
   if (!isLoaded) return <div>Loading...</div>;
-  return <Map isLogged={isLogged} setisLogged={setisLogged} />;
+  return <Map />;
 }

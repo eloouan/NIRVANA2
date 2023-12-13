@@ -1,13 +1,14 @@
+// @refresh disable
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+import { useAuth } from "../pages/AuthContext";
 import { Link } from 'react-router-dom'
-interface LoginSignUpProps {
-  isLogged: boolean;
-  setisLogged: React.Dispatch<React.SetStateAction<boolean>>;
-}
 
-const loginsignup: React.FC<LoginSignUpProps> = ({ isLogged, setisLogged }) => {
+const loginsignup = () => {
+  
+  const { isLogged, setisLogged } = useAuth();
   console.log(isLogged);
   setisLogged(true);
   console.log(isLogged);

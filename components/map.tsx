@@ -1,3 +1,5 @@
+// @refresh disable
+
 import {
   useState,
   useMemo,
@@ -7,6 +9,7 @@ import {
   Fragment,
 } from "react";
 
+import { useAuth } from "../pages/AuthContext";
 import { Link } from "react-router-dom";
 import {
   GoogleMap,
@@ -101,8 +104,8 @@ const markerIcons: Record<string, string> = {
     "https://cdn-icons-png.flaticon.com/32/4781/4781412.png",
 };
 
-const Map: React.FC<MapProps & MapsProps> = ({ isLogged, setisLogged }) => {
-  console.log(isLogged);
+const Map: React.FC<MapProps> = () => {
+  const { isLogged, setisLogged } = useAuth();
   const [officeMap1, setOfficeMap1] = useState<LatLngLiteral>();
   const [directionsMap1, setDirectionsMap1] = useState<DirectionsResult>();
   const [showMap1, setShowMap1] = useState(true);
@@ -111,7 +114,7 @@ const Map: React.FC<MapProps & MapsProps> = ({ isLogged, setisLogged }) => {
   const [officeMap2, setOfficeMap2] = useState<LatLngLiteral>();
   const [directionsMap2, setDirectionsMap2] = useState<DirectionsResult>();
   const mapRefMap2 = useRef<GoogleMap>();
-
+  console.log(isLogged);
   const addOffice = (
     address: string,
     description: string,

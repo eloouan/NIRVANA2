@@ -1,3 +1,5 @@
+// @refresh disable
+
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import type { AppProps } from "next/app";
@@ -6,6 +8,7 @@ import "../styles/globals.css";
 import PreLoader from "../components/preloader4";
 import LoginSignUp from "../components/loginsignup";
 import AdminPage from "../components/adminpage";
+import { AuthProvider } from "../pages/AuthContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [isLogged, setisLogged] = useState(false);
@@ -18,6 +21,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
+    <AuthProvider>
       <Head>
         <title>💫Fuck Synchro💫</title>
       </Head>
@@ -27,13 +31,14 @@ function MyApp({ Component, pageProps }: AppProps) {
         <BrowserRouter>
           <PreLoader />
           <Routes>
-            <Route path="/login" element={<LoginSignUp isLogged={isLogged} setisLogged={setisLogged} />} />
-            <Route path="/" element={<Component  {...pageProps} isLogged={isLogged} setisLogged={setisLogged}/>} />
+            <Route path="/login" element={<LoginSignUp />} />
+            <Route path="/" element={<Component  {...pageProps} />} />
             <Route path="/admin" element={<AdminPage />} />
           </Routes>
         </BrowserRouter>
         
       )}
+      </AuthProvider>
     </>
   );
 }
