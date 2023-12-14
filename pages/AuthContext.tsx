@@ -30,3 +30,8 @@ export const useAuth = (): AuthContextType => {
   }
   return context;
 };
+const AuthContextDefaultExport: React.FC = () => {
+  return null;
+};
+
+export default AuthContextDefaultExport;

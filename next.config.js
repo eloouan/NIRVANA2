@@ -1,4 +1,7 @@
 module.exports = {
   reactStrictMode: true,
-  distDir: 'BuildProject',
+  distDir: 'build',
+  images: {
+    unoptimized: true,
+  },
 }
