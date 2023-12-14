@@ -19,9 +19,15 @@ const loginsignup = () => {
   };
   
   const checkUser = () => {
-    
-    const name = document.querySelector("#name").value;
-    const password = document.querySelector("#password").value;
+    const nameElement = document.querySelector("#name") as HTMLInputElement | null;
+    const passwordElement = document.querySelector("#password") as HTMLInputElement | null;
+    let name="";
+    let password="";
+
+    if (nameElement && passwordElement) {
+       name = nameElement.value;
+       password = passwordElement.value;
+    }
     console.log(name);
     console.log(password);
     axios.get("https://l1.dptinfo-usmb.fr/~grp11/Tests/connexion2.php?+name="+name+"&password="+password)
@@ -42,9 +48,16 @@ const loginsignup = () => {
   })
   }
   const checkUserRegister  = () => {
+    const nameElement = document.querySelector("#name1") as HTMLInputElement | null;
+    const passwordElement = document.querySelector("#password1") as HTMLInputElement | null;
+    let name="";
+    let password="";
+
+    if (nameElement && passwordElement) {
+       name = nameElement.value;
+       password = passwordElement.value;
+    }
     
-    const name = document.querySelector("#name1").value;
-    const password = document.querySelector("#password1").value;
     if (name!="" && password!=""){
       
     console.log(name);

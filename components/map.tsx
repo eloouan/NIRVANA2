@@ -25,7 +25,6 @@ import usePlacesAutocomplete, {
   getLatLng,
 } from "use-places-autocomplete";
 import Places from "./places";
-import Distance from "./distance";
 import MenuButton from "./menu-button";
 import Snowfall from "./snowfall";
 import SnowRoof from "./images/snow-roof-long.png";

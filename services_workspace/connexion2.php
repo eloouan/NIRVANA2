@@ -4,14 +4,14 @@ header("Content-Type: application/json; charset=UTF-8");
 
 include 'db_connect.php';
 
-if(isset($_POST["name"])){
+if(isset($_GET["name"])){
 
 	session_start();
 
 	$sql="SELECT * FROM `user`";
 	$query=mysqli_query($conn, $sql) or die(mysqli_error($conn));
-	$name = $_POST['name'];
-	$password = $_POST['password'];
+	$name = $_GET['name'];
+	$password = $_GET['password'];
 	$password_crypte = hash('sha256', $password);
 	$user_id = -2;
 	$loginSuccessful = false;
