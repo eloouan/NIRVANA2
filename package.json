@@ -5,9 +5,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "set PORT=3007 && next start",
-    "lint": "next lint",
-    "LLL": "node ./deploy.mjs",
-    "deploy": "next build && next export && node ./deploy.mjs"
+    "lint": "next lint"
   },
   "dependencies": {
     "@reach/combobox": "^0.16.5",
@@ -25,7 +23,6 @@
     "sonner": "^1.2.4",
     "use-places-autocomplete": "^1.11.0"
   },
-  
   "devDependencies": {
     "@types/node": "^17.0.45",
     "@types/react": "^17.0.72",
