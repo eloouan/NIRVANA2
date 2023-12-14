@@ -27,8 +27,8 @@ function MyApp({ Component, pageProps }: AppProps) {
 
       {/* Utilisation de BrowserRouter à l'intérieur de useEffect pour éviter l'exécution côté serveur */}
       {typeof window !== "undefined" && (
-        <BrowserRouter>{/*
-      <PreLoader /> à rajouté*/}
+        <BrowserRouter>
+        <PreLoader/>
           <Routes>
             <Route path="/login" element={<LoginSignUp />} />
             <Route path="/" element={<Component  {...pageProps} />} />
