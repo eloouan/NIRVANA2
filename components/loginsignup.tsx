@@ -8,10 +8,9 @@ import { Link, useNavigate  } from 'react-router-dom';
 
 const loginsignup = () => {
   const navigate = useNavigate ();
-  
   const { isLogged, isAdmin, userId, setisLogged, setuserId, setisAdmin} = useAuth();
   const [menuVisible, setMenuVisible] = useState(false);
-  const [loginVisible, setLoginVisible] = useState(false);
+  const [loginVisible, setLoginVisible] = useState(true);
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
@@ -42,10 +41,37 @@ const loginsignup = () => {
         }
   })
   }
+  const checkUserRegister  = () => {
+    
+    const name = document.querySelector("#name1").value;
+    const password = document.querySelector("#password1").value;
+    if (name!="" && password!=""){
+      
+    console.log(name);
+    console.log(password);
+    axios.get("https://l1.dptinfo-usmb.fr/~grp11/Tests/inscription.php?+name="+name+"&password="+password)
+      .then(response => {
+        console.log(response.data)
+        if (!response.data) {
+          toggleLoginPage();
+          
+        
+        } else {
+          toast.error('Utilisateur déjà existant ', {
+            description: 'Veuillez changer de name',
+          });
+        }
+  })
+}
+  }
   return (
+    <div>
+      
       <div className="Logincontainer">
       <Toaster richColors  position="top-center"/>
+      {loginVisible &&
         <div className="Loginheader">
+          
             <h3>Login</h3>
           <div className="Logininputs">
           <div className="Loginusername">
@@ -69,12 +95,44 @@ const loginsignup = () => {
             </div>
             <div className="Loginregister">
                 <p>Don't have an account?
-                    <a href="#" target="_blank">
-                        <span>Register</span>
-                    </a>
+                        <span onClick={toggleLoginPage}>   Register</span>
                 </p>
             </div>
         </div>
+}
+{!loginVisible &&
+        <div className="Loginheader">
+          
+            <h3>Register</h3>
+          <div className="Logininputs">
+          <div className="Loginusername">
+            <img className="person" src="person.png"  />
+            <input id="name1" name="name1" type="text" />
+            </div>
+            <div className="Loginpassword">
+            <img className="password" src="password.png" />
+            <input type="password" id="password1" name="password1"/>
+            </div>
+         </div>
+         <div className="Loginbuttons">
+                <div className="Loginremember">
+                    <input type="checkbox" className="Logincheckbox"/>
+                    <p>Remember me</p>
+                </div>
+                <p>Forgot Password</p>
+            </div>
+            <div className="Loginbtn-box">
+            <a onClick={checkUserRegister} >Register</a>
+            </div>
+            <div className="Loginregister">
+                <p>Have Already an account?   
+                        <span onClick={toggleLoginPage}>   Loggin</span>
+                </p>
+            </div>
+        </div>
+
+
+}
         <div className="menu-button" style={{ bottom: "20px", right: "10px" }}>
         <div className="wrapper">
           <input type="checkbox" />
@@ -90,8 +148,7 @@ const loginsignup = () => {
 
         
     </div>
-    
-
+    </div>
       
   );
 };
