@@ -73,14 +73,27 @@ export default function Places({ setOffice, createMarker }: PlacesProps) {
         />
         <ComboboxPopover>
           <ComboboxList>
-            <ComboboxOption value="restaurant" />
-            <ComboboxOption value="shopping" />
-            <ComboboxOption value="entertainment" />
-            <ComboboxOption value="school" />
-            <ComboboxOption value="park" />
-            <ComboboxOption value="gym" />
-            <ComboboxOption value="transport" />
-            {/* Add more options as needed */}
+            <ComboboxOption value="restaurant 🍗" />
+            <ComboboxOption value="shopping 🎁" />
+            <ComboboxOption value="cinema 🎥" />
+            <ComboboxOption value="school 👨‍🏫" />
+            <ComboboxOption value="park 🌲" />
+            <ComboboxOption value="gym 💪" />
+            <ComboboxOption value="transport 🚊" />
+            <ComboboxOption value="bar 🍺" />
+            <ComboboxOption value="theater 🎭" />
+            <ComboboxOption value="swimming pool 🏊" />
+            <ComboboxOption value="ice cream shop 🍦" />
+            <ComboboxOption value="church ⛪" />
+            <ComboboxOption value="clothing store 👜" />
+            <ComboboxOption value="bakery 🥐" />
+            <ComboboxOption value="hotel 🛏️" />
+            <ComboboxOption value="museum 🎨" />
+            <ComboboxOption value="night club 🍸" />
+            <ComboboxOption value="tourist attraction 🗿" />
+            <ComboboxOption value="sport 🏓" />
+            <ComboboxOption value="beach ⛱️" />
+            setIsOptionSelected(false);
           </ComboboxList>
         </ComboboxPopover>
       </Combobox>

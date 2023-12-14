@@ -90,40 +90,6 @@ a {
   left: 300px;
 }
 
-.header-snow-roof1 {
-  position: absolute;
-  top: 0px;
-  left: -635px; /*635*/
-  width: 100%;
-  height: 10%; /* Set an appropriate height */
-  background-image: url('images/snow-roof-long.png');
-  background-size: contain; /* cover or contain */
-  background-repeat: no-repeat;
-  background-position:center;
-}
-.header-snow-roof2 {
-  position: absolute;
-  top: 0px;
-  left: 669px; /*633*/
-  width: 100%;
-  height: 10%; /* Set an appropriate height */
-  background-image: url('images/snow-roof-long.png');
-  background-size: contain; /* cover or contain */
-  background-repeat: no-repeat;
-  background-position:center;
-}
-
-.header-snow-roof3 {
-  position: absolute;
-  top: 0px;
-  left: 17px;
-  width: 100%;
-  height: 10%; /* Set an appropriate height */
-  background-image: url('images/snow-roof-long.png');
-  background-size: contain; /* cover or contain */
-  background-repeat: no-repeat;
-  background-position:center;
-}
 .header-snow-roof4 {
   position: absolute;
   top: -23px;
@@ -356,6 +322,70 @@ a {
 }
 
 .filter-item:nth-child(7) .filter-label:hover {
+  background-color: rgba(127, 161, 224, 0.8);
+  transform: scale(1.2);
+}
+.filter-item:nth-child(8) .filter-label:hover {
+  background-color: rgba(57, 180, 221, 0.8);
+  transform: scale(1.2);
+}
+
+.filter-item:nth-child(9) .filter-label:hover {
+  background-color: rgba(24, 119, 191, 0.8);
+  transform: scale(1.2);
+}
+.filter-item:nth-child(10) .filter-label:hover {
+  background-color: rgba(16, 188, 162, 0.8);
+  transform: scale(1.2);
+}
+
+.filter-item:nth-child(11) .filter-label:hover {
+  background-color: rgba(118, 151, 183, 0.8);
+  transform: scale(1.2);
+}
+.filter-item:nth-child(12) .filter-label:hover {
+  background-color: rgba(216, 168, 109, 0.8);
+  transform: scale(1.2);
+}
+
+.filter-item:nth-child(13) .filter-label:hover {
+  background-color: rgba(220, 144, 144, 0.8);
+  transform: scale(1.2);
+}
+
+.filter-item:nth-child(14) .filter-label:hover {
+  background-color: rgba(127, 161, 224, 0.8);
+  transform: scale(1.2);
+}
+.filter-item:nth-child(15) .filter-label:hover {
+  background-color: rgba(57, 180, 221, 0.8);
+  transform: scale(1.2);
+}
+
+.filter-item:nth-child(16) .filter-label:hover {
+  background-color: rgba(24, 119, 191, 0.8);
+  transform: scale(1.2);
+}
+.filter-item:nth-child(17) .filter-label:hover {
+  background-color: rgba(16, 188, 162, 0.8);
+  transform: scale(1.2);
+}
+
+.filter-item:nth-child(18) .filter-label:hover {
+  background-color: rgba(118, 151, 183, 0.8);
+  transform: scale(1.2);
+}
+.filter-item:nth-child(19) .filter-label:hover {
+  background-color: rgba(216, 168, 109, 0.8);
+  transform: scale(1.2);
+}
+
+.filter-item:nth-child(20) .filter-label:hover {
+  background-color: rgba(220, 144, 144, 0.8);
+  transform: scale(1.2);
+}
+
+.filter-item:nth-child(21) .filter-label:hover {
   background-color: rgba(127, 161, 224, 0.8);
   transform: scale(1.2);
 }
@@ -649,14 +679,12 @@ p {
 }
 
 .Logincontainer {
-
-  background: url(../public/foret.jpg);
-    background-color: #eff8e2;
+    background: url('images/map1background.png');
     height: 100vh;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    accent-color: #4f772d;
+    accent-color: #ffffff;
     font: "Lexend Deca", sans-serif;
     display: flex;
     flex-direction: column;

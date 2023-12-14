@@ -34,7 +34,6 @@ import { off } from "process";
 import InfoWindowWithForm from "./infoWindowWithForm";
 import axios from "axios";
 
-
 type LatLngLiteral = google.maps.LatLngLiteral;
 type DirectionsResult = google.maps.DirectionsResult;
 type MapOptions = google.maps.MapOptions;
@@ -57,23 +56,24 @@ type MarkerIconType =
   | "hotel"
   | "museum"
   | "night club"
-  | "tourist attraction";
+  | "tourist attraction"
+  | "sport"
+  | "beach";
 
-  type ItemType = {
-    address: string;
-    description: string;
-    type: string;
-    coordX: string;
-    coordY: string;
-  };
-  
-  type PointType = {
-    address: string;
-    description: string;
-    type: string;
-    position: { lat: number; lng: number };
-  };
+type ItemType = {
+  address: string;
+  description: string;
+  type: string;
+  coordX: string;
+  coordY: string;
+};
 
+type PointType = {
+  address: string;
+  description: string;
+  type: string;
+  position: { lat: number; lng: number };
+};
 
 const markerIcons: Record<string, string> = {
   restaurant: "https://cdn-icons-png.flaticon.com/32/3280/3280300.png",
@@ -97,10 +97,13 @@ const markerIcons: Record<string, string> = {
   "night club": "https://cdn-icons-png.flaticon.com/32/4973/4973066.png",
   "tourist attraction":
     "https://cdn-icons-png.flaticon.com/32/4781/4781412.png",
+  sport: "https://cdn-icons-png.flaticon.com/32//2271/2271062.png",
+  beach: "https://cdn-icons-png.flaticon.com/32/7584/7584243.png",
 };
 
 const Map: React.FC<MapProps> = () => {
-  const { isLogged, isAdmin, userId, setisLogged, setuserId, setisAdmin} = useAuth();
+  const { isLogged, isAdmin, userId, setisLogged, setuserId, setisAdmin } =
+    useAuth();
   const [officeMap1, setOfficeMap1] = useState<LatLngLiteral>();
   const [directionsMap1, setDirectionsMap1] = useState<DirectionsResult>();
   const [showMap1, setShowMap1] = useState(true);
@@ -109,7 +112,7 @@ const Map: React.FC<MapProps> = () => {
   const [officeMap2, setOfficeMap2] = useState<LatLngLiteral>();
   const [directionsMap2, setDirectionsMap2] = useState<DirectionsResult>();
   const mapRefMap2 = useRef<GoogleMap>();
-  console.log("Logged"+isLogged);
+  console.log("Logged" + isLogged);
   console.log("Admin" + isAdmin);
   console.log(userId);
   const addOffice = (
@@ -150,30 +153,30 @@ const Map: React.FC<MapProps> = () => {
 
   if (isLogged) {
     axios
-    .get("https://l1.dptinfo-usmb.fr/~grp11/Tests/get_private_points.php?user_id="+userId)
-    .then((response) => {
-      response.data.forEach((item: ItemType) => {
-        let point_a_add = {
-          address: "",
-          description: "",
-          type: "",
-          position: {
-            lat: 45.57124197967436,
-            lng: 5.919697965999837,
-          },
-        };
-        point_a_add.address = item.address; //// JE DOIS REBUILD UN POINT POUR ENFIN LE ADD DANS LE DEFAULT POI
-        point_a_add.description = item.description;
-        point_a_add.type = item.type;
-        point_a_add.position.lat = parseFloat(item.coordX);
-        point_a_add.position.lng = parseFloat(item.coordY);
-        privatePoi = [...privatePoi, point_a_add];
+      .get(
+        "https://l1.dptinfo-usmb.fr/~grp11/Tests/get_private_points.php?user_id=" +
+          userId
+      )
+      .then((response) => {
+        response.data.forEach((item: ItemType) => {
+          let point_a_add = {
+            address: "",
+            description: "",
+            type: "",
+            position: {
+              lat: 45.57124197967436,
+              lng: 5.919697965999837,
+            },
+          };
+          point_a_add.address = item.address; //// JE DOIS REBUILD UN POINT POUR ENFIN LE ADD DANS LE DEFAULT POI
+          point_a_add.description = item.description;
+          point_a_add.type = item.type;
+          point_a_add.position.lat = parseFloat(item.coordX);
+          point_a_add.position.lng = parseFloat(item.coordY);
+          privatePoi = [...privatePoi, point_a_add];
+        });
       });
-    });
   }
-
-  
-
 
   const onLoadMap1 = useCallback((map) => (mapRefMap1.current = map), []);
   const onLoadMap2 = useCallback((map) => (mapRefMap2.current = map), []);
@@ -298,6 +301,8 @@ const Map: React.FC<MapProps> = () => {
     "night club": "https://cdn-icons-png.flaticon.com/32/4973/4973066.png",
     "tourist attraction":
       "https://cdn-icons-png.flaticon.com/32/4781/4781412.png",
+    sport: "https://cdn-icons-png.flaticon.com/32//2271/2271062.png",
+    beach: "https://cdn-icons-png.flaticon.com/32/7584/7584243.png",
   };
 
   const handleMarkerFilter = (type: string) => {
@@ -554,6 +559,8 @@ const Map: React.FC<MapProps> = () => {
             "museum",
             "night club",
             "tourist attraction",
+            "sport",
+            "beach",
           ]}
           displayTypes={[
             "🍗",
@@ -574,6 +581,8 @@ const Map: React.FC<MapProps> = () => {
             "🎨",
             "🍸",
             "🗿",
+            "🏓",
+            "⛱️",
           ]}
           onClick={(type) => handleMarkerFilter(type)}
         />
@@ -604,7 +613,6 @@ console.log(data);
 }
 
 // Base de donnees exemple Chambery
-
 
 axios
   .get("https://l1.dptinfo-usmb.fr/~grp11/Tests/get_default_points.php")
@@ -678,7 +686,6 @@ let defaultPoi = [
 
 let user_id = null; //RAPPEL TOI
 
-let privatePoi: PointType[] = [
-];
+let privatePoi: PointType[] = [];
 
 export default Map;
