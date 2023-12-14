@@ -482,16 +482,13 @@ const Map: React.FC<MapProps> = () => {
                 />
                 {selectedOffice &&
                   selectedOffice.position === office.position && (
-                    <InfoWindow
-                      position={office.position}
+                    <InfoWindowWithForm
+                      marker={office}
                       onCloseClick={() => setSelectedOffice(null)}
-                    >
-                      <div>
-                        <h3>{office.address}</h3>
-
-                        {/* Add any additional information you want to display */}
-                      </div>
-                    </InfoWindow>
+                      onDescriptionChange={(description: string) => {
+                        office.description = description;
+                      }}
+                    />
                   )}
               </Fragment>
             ))}
@@ -682,16 +679,7 @@ let defaultPoi = [
 
 let user_id = null; //RAPPEL TOI
 
-let privatePoi = [
-  {
-    address: "32 Pl. Monge, 73000 Chambéry",
-    description: "Restaurant Carré des Sens - fine dining",
-    type: "restaurant",
-    position: {
-      lat: 45.56324311633563,
-      lng: 5.921157303181863,
-    },
-  },
+let privatePoi: PointType[] = [
 ];
 
 export default Map;
