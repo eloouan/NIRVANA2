@@ -2,11 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
+import { Toaster, toast } from 'sonner';
 import { useAuth } from "../pages/AuthContext";
-import { Link } from 'react-router-dom'
+import { Link, useNavigate  } from 'react-router-dom';
 
 const loginsignup = () => {
+  const navigate = useNavigate ();
   
   const { isLogged, isAdmin, userId, setisLogged, setuserId, setisAdmin} = useAuth();
   const [menuVisible, setMenuVisible] = useState(false);
@@ -19,6 +20,7 @@ const loginsignup = () => {
   };
   
   const checkUser = () => {
+    
     const name = document.querySelector("#name").value;
     const password = document.querySelector("#password").value;
     console.log(name);
@@ -31,13 +33,18 @@ const loginsignup = () => {
         if (response.data.isadmin){
           setisAdmin(true);
         }
+        navigate('/');
+        
         } else {
-        console.log(response.data.loginSuccessful);
+          toast.error('Identifiant ou mot de passe incorrect ', {
+            description: 'Veuillez saisir à nouveaux vos logs',
+          });
         }
   })
   }
   return (
       <div className="Logincontainer">
+      <Toaster richColors  position="top-center"/>
         <div className="Loginheader">
             <h3>Login</h3>
           <div className="Logininputs">
@@ -58,7 +65,7 @@ const loginsignup = () => {
                 <p>Forgot Password</p>
             </div>
             <div className="Loginbtn-box">
-            <Link to="/"><a onClick={checkUser} >Login</a></Link>
+            <a onClick={checkUser} >Login</a>
             </div>
             <div className="Loginregister">
                 <p>Don't have an account?
