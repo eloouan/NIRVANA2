@@ -158,6 +158,7 @@ a {
 
 .menu-button,
 .menu-inside {
+  
   position: fixed;
 }
 
@@ -596,9 +597,10 @@ a {
   justify-content: center;
   color: white;
   overflow: hidden !important;
+}
 
-  .texts-container {
-      display: flex;
+.preloader .texts-container {
+  display: flex;
       align-items: center;
       justify-content: space-between;
       height: 60px;
@@ -607,15 +609,8 @@ a {
       overflow: hidden;
       font-weight: 800;
       opacity: 0;
-      color: $white;
-
-      @include media("<=phone") {
-          font-size: 17px;
-          width: 240px;
-      }
-  }
+      color: white;
 }
-
 
 
 /*CSS LOGIN PAGE*/
@@ -645,7 +640,7 @@ a {
     border: 1px solid #a3b18a;
 }
 
-input::placeholder {
+.Loginheader input::placeholder {
   color: #ddd;
 }
 
@@ -745,7 +740,7 @@ a:hover {
 :root {
   --background: #4285f4;
   --icon-color: #344955;
-  --width: 70px;
+  --width: 50px;
   --height: 50px;
   --border-radius: 100%;
 }
@@ -767,32 +762,32 @@ a:hover {
   width: var(--width);
   height: var(--height);
   position: relative;
-  z-index: 1;
+  z-index: 3;
   border-radius: var(--border-radius);
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
-  animation: fab-animation-reverse 0.5s ease-out forwards;
-}
+  animation: fab-animation-reverse 0.4s ease-out forwards;
 
-.fab::before,
-.fab::after {
-  content: "";
-  display: block;
-  position: absolute;
-  border-radius: 4px;
-  background: #fff;
-}
+  &::before,
+  &::after {
+    content: "";
+    display: block;
+    position: absolute;
+    border-radius: 4px;
+    background: #fff;
+  }
 
-.fab::before {
-  width: 4px;
-  height: 18px;
-}
+  &::before {
+    width: 4px;
+    height: 18px;
+  }
 
-.fab::after {
-  width: 18px;
-  height: 4px;
+  &::after {
+    width: 18px;
+    height: 4px;
+  }
 }
 
 .fac {
@@ -805,46 +800,46 @@ a:hover {
   padding: 0.5rem 0.5rem;
   box-shadow: 0 2px 4px rgba(23, 36, 87, 0.4);
   opacity: 0;
-  top: 0px; /* Fix this Elouan, no container -> this is useless */
+  top: 0px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
   transition: opacity 0.2s ease-in, top 0.2s ease-in, width 0.1s ease-in;
+
+  a {
+    color: var(--icon-color);
+    opacity: 0.8;
+
+    &:hover {
+      transition: 0.2s;
+      opacity: 1;
+      color: darken(#344955, 2%);
+    }
+  }
 }
 
-.fac a {
-  color: var(--icon-color);
-  opacity: 0.8;
-}
-
-.fac a:hover {
-  transition: 0.2s;
-  opacity: 1;
-  color: darken(#344955, 2%);
-}
-
-.fac input {
+.wrapper input {
   height: 100%;
   width: 100%;
   border-radius: var(--border-radius);
   cursor: pointer;
   position: absolute;
   z-index: 5;
-  opacity: 1;
-}
+  opacity: 0;
 
-input:checked {
-  ~ .fab {
-    animation: fab-animation 0.4s ease-out forwards; /* fucking big ass blue button */
-  }
+  &:checked {
+    ~ .fab {
+      animation: fab-animation 0.4s ease-out forwards;
+    }
 
-  ~ .fac {
-    width: 32px;
-    height: 150px;
-    animation: fac-animation 0.4s ease-out forwards 0.1s;
-    top: 70px;
-    opacity: 1;
+    ~ .fac {
+      width: 32px;
+      height: 150px;
+      animation: fac-animation 0.4s ease-out forwards 0.1s;
+      top: 70px;
+      opacity: 1;
+    }
   }
 }
 

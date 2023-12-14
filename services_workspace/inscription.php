@@ -6,9 +6,9 @@ header("Content-Type: application/json; charset=UTF-8");
 	include("user_crud.php");
 
 	
-	if (isset($_GET['name']) && isset($_GET['password'])){
-		$name = $_GET["name"];
-		$password = $_GET["password"];
+	if (isset($_POST['name']) && isset($_POST['password'])){
+		$name = $_POST["name"];
+		$password = $_POST["password"];
 		
 		$password_crypte = hash('sha256', $password);
 
