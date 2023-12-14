@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { Link } from 'react-router-dom'
 
-const adminpage = () => {
+const AdminPage = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [loginVisible, setLoginVisible] = useState(false);
   const toggleMenu = () => {
@@ -37,5 +37,5 @@ const adminpage = () => {
   );
 };
 
-export default adminpage;
+export default AdminPage;
 

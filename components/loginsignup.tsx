@@ -5,8 +5,9 @@ import axios from "axios";
 import { Toaster, toast } from 'sonner';
 import { useAuth } from "../pages/AuthContext";
 import { Link, useNavigate  } from 'react-router-dom';
+import Image from 'next/image';
 
-const loginsignup = () => {
+const LoginSignup = () => {
   const navigate = useNavigate ();
   const { isLogged, isAdmin, userId, setisLogged, setuserId, setisAdmin} = useAuth();
   const [menuVisible, setMenuVisible] = useState(false);
@@ -41,8 +42,8 @@ const loginsignup = () => {
         navigate('/');
         
         } else {
-          toast.error('Identifiant ou mot de passe incorrect ', {
-            description: 'Veuillez saisir à nouveaux vos logs',
+          toast.error("Identifiant ou mot de passe incorrect ", {
+            description: "Veuillez saisir à nouveaux vos logs",
           });
         }
   })
@@ -70,8 +71,8 @@ const loginsignup = () => {
           
         
         } else {
-          toast.error('Utilisateur déjà existant ', {
-            description: 'Veuillez changer de name',
+          toast.error("Utilisateur déjà existant ", {
+            description: "Veuillez changer de name",
           });
         }
   })
@@ -88,11 +89,11 @@ const loginsignup = () => {
             <h3>Login</h3>
           <div className="Logininputs">
           <div className="Loginusername">
-            <img className="person" src="person.png"  />
+            <Image className="person" src="/person.png"  width={20} height={21} alt=""/>
             <input id="name" name="name" type="text" />
             </div>
             <div className="Loginpassword">
-            <img className="password" src="password.png" />
+            <Image className="password" src="/password.png" width={19} height={22} alt=""/>
             <input type="password" id="password" name="password"/>
             </div>
          </div>
@@ -107,7 +108,7 @@ const loginsignup = () => {
             <a onClick={checkUser} >Login</a>
             </div>
             <div className="Loginregister">
-                <p>Don't have an account?
+                <p>Don t have an account?
                         <span onClick={toggleLoginPage}>   Register</span>
                 </p>
             </div>
@@ -119,11 +120,11 @@ const loginsignup = () => {
             <h3>Register</h3>
           <div className="Logininputs">
           <div className="Loginusername">
-            <img className="person" src="person.png"  />
+            <Image className="person" src="person.png"  layout="fill" alt=""/>
             <input id="name1" name="name1" type="text" />
             </div>
             <div className="Loginpassword">
-            <img className="password" src="password.png" />
+            <Image className="password" src="password.png" layout="fill" alt=""/>
             <input type="password" id="password1" name="password1"/>
             </div>
          </div>
@@ -166,5 +167,5 @@ const loginsignup = () => {
   );
 };
 
-export default loginsignup;
+export default LoginSignup;
 
